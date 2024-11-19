@@ -1,17 +1,16 @@
 body {
   margin: 0px;
   overflow-x: hidden;
+  color: white;
 }
 
 section {
   min-height: 100vh;
   padding: 20px;
   font-size: 4vh;
-}
-
-header {
   color: white;
 }
+
 
 /*CANVAS DO THREE.js*/
 canvas {

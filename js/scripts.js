@@ -8,7 +8,7 @@ const kingUrl = new URL('../assets/king.gltf', import.meta.url);
 
 // -----------------------------------BASE DE DADOS------------------------------------------------
 // URL to your PHP script (necessário XAMPP server)
-const apiUrl = './fetch-data.php';
+const apiUrl = './php/fetch-data.php';
 
 // Fetch data from the PHP script   
 fetch(apiUrl)
