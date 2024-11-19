@@ -6,6 +6,40 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'gtlf';
 const kingUrl = new URL('../assets/king.gltf', import.meta.url);
 
+// -----------------------------------BASE DE DADOS------------------------------------------------
+// URL to your PHP script (necessário XAMPP server)
+const apiUrl = './fetch-data.php';
+
+// Fetch data from the PHP script   
+fetch(apiUrl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();  // Parse the JSON from the PHP response
+    })
+    .then(data => {
+        console.log(data);  // Display the fetched data in the console
+        displayData(data);  // Function to handle the data in the frontend
+    })
+    .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+    });
+
+    function displayData(data) {
+        const tableBody = document.getElementById("pratosTable").getElementsByTagName("tbody")[0];
+        tableBody.innerHTML = ""; // Clear existing table data
+    
+        data.forEach(prato => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = prato.id;
+            row.insertCell(1).textContent = prato.nome;
+            row.insertCell(2).textContent = prato.ingredientes;
+            row.insertCell(3).textContent = prato.descricao;
+        });
+    }
+
+    //-------------------------------THREE.JS-----------------------------------------------
 //RENDERER
 const renderer = new THREE.WebGLRenderer();
 //renderer.shadowMap.enabled = true;
@@ -73,14 +107,14 @@ animationScripts.push({
         //camera posicao 1 (0, 2, 2)
         //camera posicao 2 (0, 3, 0)
 
-                        //ROTACAO DA CAMARA
-                        if (camera.position.y > 2) {
-                            camera.lookAt(scene.position);
-                            camera.position.y -= 0.02;
-                        }
-                        if (camera.position.z < 2) {
-                            camera.position.z += 0.04;
-                        }
+        //ROTACAO DA CAMARA
+        if (camera.position.y > 2) {
+            camera.lookAt(scene.position);
+            camera.position.y -= 0.02;
+        }
+        if (camera.position.z < 2) {
+            camera.position.z += 0.04;
+        }
 
 
 
@@ -94,18 +128,18 @@ animationScripts.push({
     end: 100,
     func: () => {
 
-                //ROTACAO DA CAMARA para o topo
-                if (camera.position.y < 3) {
-                    camera.lookAt(scene.position);
-                    camera.position.y += 0.02;
-                }
-                if (camera.position.z > 0) {
-                    camera.position.z -= 0.04;
-                }
-                //acerto da rotacao da cena
-                if (scene.rotation.y < Math.PI){
-                    scene.rotation.y += 0.02;
-                }
+        //ROTACAO DA CAMARA para o topo
+        if (camera.position.y < 3) {
+            camera.lookAt(scene.position);
+            camera.position.y += 0.02;
+        }
+        if (camera.position.z > 0) {
+            camera.position.z -= 0.04;
+        }
+        //acerto da rotacao da cena
+        if (scene.rotation.y < Math.PI) {
+            scene.rotation.y += 0.02;
+        }
     },
 });
 //percorrimento de todas as animações
@@ -142,12 +176,12 @@ window.addEventListener('resize', function () {
 
 renderer.setAnimationLoop(animate);
 
-        /* //POSSIVEL IDLE ANIMATION
-        if(scene.rotation.x <=0.05 && estado == 1){
-            scene.rotateX(0.001);  
-            //console.log(scene.rotation.z);          
-        } else if(estado == 1) estado = 2; 
-        if (scene.rotation.x >= -0.05 && estado == 2){
-            scene.rotateX(-0.001);
-        } else if (estado == 2) estado = 1;
-         */
+/* //POSSIVEL IDLE ANIMATION
+if(scene.rotation.x <=0.05 && estado == 1){
+    scene.rotateX(0.001);  
+    //console.log(scene.rotation.z);          
+} else if(estado == 1) estado = 2; 
+if (scene.rotation.x >= -0.05 && estado == 2){
+    scene.rotateX(-0.001);
+} else if (estado == 2) estado = 1;
+ */
