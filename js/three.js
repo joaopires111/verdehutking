@@ -1,43 +1,7 @@
-// Select the background container
-//const container = document.getElementById('threejs-background');
-
 //IMPORTS
 import * as THREE from 'three';
 import { GLTFLoader } from 'gtlf';
 const kingUrl = new URL('../assets/king.gltf', import.meta.url);
-
-// -----------------------------------BASE DE DADOS------------------------------------------------
-// URL to your PHP script (necessário XAMPP server)
-const apiUrl = './php/fetch-data.php';
-
-// Fetch data from the PHP script   
-fetch(apiUrl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.json();  // Parse the JSON from the PHP response
-    })
-    .then(data => {
-        console.log(data);  // Display the fetched data in the console
-        displayData(data);  // Function to handle the data in the frontend
-    })
-    .catch(error => {
-        console.error("There was a problem with the fetch operation:", error);
-    });
-
-    function displayData(data) {
-        const tableBody = document.getElementById("pratosTable").getElementsByTagName("tbody")[0];
-        tableBody.innerHTML = ""; // Clear existing table data
-    
-        data.forEach(prato => {
-            const row = tableBody.insertRow();
-            row.insertCell(0).textContent = prato.id;
-            row.insertCell(1).textContent = prato.nome;
-            row.insertCell(2).textContent = prato.ingredientes;
-            row.insertCell(3).textContent = prato.descricao;
-        });
-    }
 
     //-------------------------------THREE.JS-----------------------------------------------
 //RENDERER

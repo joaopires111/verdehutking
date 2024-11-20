@@ -21,64 +21,63 @@
               }
             }
           </script>
-    <script src="/js/scripts.js" type="module"></script>
+          
 </head>
 
 <body>
-    <span id="scrollProgress"></span>
-  
-
-        <section id="page-top" class="container px-4 pt-lg-5 text-center">
-            <img src="assets\img\so texto verde hut.png" alt="verdehutlogo" width="30%" height="30%">
-
-            <p></p>
-            <h3 class="mb-4"><em>O VerdeHut está agora aberto !</em></h3>
-
-            <h6 class="mb-5"><em>Somos um restaurante vegano no centro do Porto, vem nos conhecer !<p></em></h3>
-                <a class="btn btn-success btn-xl mt-5 " href="#callout">Contactos</a>
-
-        </section>
-
-        <section class="container px-4 pt-lg-5 text-center">
-            <table id="pratosTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Ingredientes</th>
-                        <th>Descrição</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be added here dynamically by JavaScript -->
-                </tbody>
-            </table>
-        </section>
-
-
-
-
-        <section id="callout" class="container px-4 px-lg-5 text-center">
-            <h6 class="mb-3">
-                Contacto : +351 920 505 245
-            </h6>
-            <h6 class="mb-5">
-                Morada : <a href="https://maps.app.goo.gl/dawatWCsQQGLxQUWA"> R. de Santa Catarina 632, 4000-450
-                    Porto </a>
-            </h6>
-            <a class="btn btn-success btn-xl mt-5" href="#page-top">voltar a inicio</a>
-        </section>
-
-
     
+    <span id="scrollProgress"></span>
 
+    <section id="page-top" class="container px-4 pt-lg-5 text-center">
+        <img src="assets\img\so texto verde hut.png" alt="verdehutlogo" width="30%" height="30%">
 
+        <p></p>
+        <h3 class="mb-4"><em>O VerdeHut está agora aberto !</em></h3>
+
+        <h6 class="mb-5"><em>Somos um restaurante vegano no centro do Porto, vem nos conhecer !<p></em></h3>
+            <a class="btn btn-success btn-xl mt-5 " href="#callout">Contactos</a>
+
+    </section>
+    <!-- CRUD LIST -->
+    <section class="">
+        <h1>CRUD Application</h1>
+    
+        <!-- Item List -->
+        <ul id="items-list"></ul>
+        
+        <!-- Create Item -->
+        <h2>Create Item</h2>
+        <input type="text" id="name" placeholder="Name">
+        <textarea id="description" placeholder="Description"></textarea>
+        <button onclick="createItem()">Create</button>
+    
+        <!-- Update Item -->
+        <h2>Update Item</h2>
+        <input type="number" id="update-id" placeholder="Item ID">
+        <input type="text" id="update-name" placeholder="Updated Name">
+        <textarea id="update-description" placeholder="Updated Description"></textarea>
+        <button onclick="updateItem()">Update</button>
+    </section>
+
+    <section id="callout" class="container px-4 px-lg-5 text-center">
+        <h6 class="mb-3">
+            Contacto : +351 920 505 245
+        </h6>
+        <h6 class="mb-5">
+            Morada : <a href="https://maps.app.goo.gl/dawatWCsQQGLxQUWA"> R. de Santa Catarina 632, 4000-450
+                Porto </a>
+        </h6>
+        <a class="btn btn-success btn-xl mt-5" href="#page-top">voltar a inicio</a>
+    </section>
 
     <footer class="footer text-center container px-4 px-lg-5">
         <p class="text-muted small mb-0">
             VerdeHut &copy; Copyright
         </p>
     </footer>
+
+    <script src="./js/crud.js"></script>
+    <script src="./js/three.js" type="module"></script>
 </body>
 
 </html>

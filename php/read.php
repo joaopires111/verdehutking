@@ -1,6 +1,6 @@
 <?php
 // read.php
-include 'db.php';
+include './db.php';
 
 $stmt = $pdo->query("SELECT * FROM items");
 $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
