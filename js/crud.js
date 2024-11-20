@@ -4,15 +4,25 @@ function fetchItems() {
         .then(response => response.json())
         .then(items => {
             const list = document.getElementById('items-list');
-            list.innerHTML = '';
+            list.innerHTML = `        
+            <thead>
+            <tr>
+            <th>id</th>
+            <th>nome</th>
+            <th>descrição</th>
+            <th>apagar</th>
+            <th>editar</th>
+            </thead>
+        </tr>`;
             items.forEach(item => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <strong>${item.name}</strong>: ${item.description}
-                    <button onclick="deleteItem(${item.id})">Delete</button>
-                    <button onclick="prepareUpdate(${item.id}, '${item.name}', '${item.description}')">Edit</button>
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <th>${item.id}</th><th>${item.name}</th><th>${item.description}</th>
+                    <th><a class="btn btn-success btn-xl mt-5" onclick="deleteItem(${item.id})">apagar</a></th>
+                    <th><a class="btn btn-success btn-xl mt-5" onclick="prepareUpdate(${item.id}, '${item.name}', '${item.description}')">editar</a></th>
                 `;
-                list.appendChild(li);
+                
+                list.appendChild(tr);
             });
         });
 }

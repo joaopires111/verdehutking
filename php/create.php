@@ -8,6 +8,5 @@ $description = $data['description'];
 
 $stmt = $pdo->prepare("INSERT INTO items (name, description) VALUES (:name, :description)");
 $stmt->execute([':name' => $name, ':description' => $description]);
-//?? ainda n sei
 echo json_encode(['message' => 'Item created successfully']);
 ?>

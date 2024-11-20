@@ -1,31 +1,35 @@
 body {
   margin: 0px;
   overflow-x: hidden;
-  color: white;
+  z-index: 0;
 }
 
 section {
   min-height: 100vh;
   padding: 20px;
-  font-size: 4vh;
+  font-size: 3vh;
   color: white;
 }
 
-
+table{
+  margin: auto;
+  width: 800px;
+  border: 3px solid green;
+  padding: 10px;
+}
 /*CANVAS DO THREE.js*/
 canvas {
   position: fixed;
   top: 0;
   left: 0;
   z-index: -1;/* Keeps this content in the back*/
-
 }
 
 #scrollProgress {
   position: fixed;
   bottom: 10px;
   left: 10px;
-  z-index: 99;
+  z-index: 1;
   font-size: 3vh;
 }
 
