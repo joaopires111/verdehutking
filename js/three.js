@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'gtlf';
 const kingUrl = new URL('../assets/king.gltf', import.meta.url);
 
+    //-------------------------------Tabela Mesas------------------------------------------
+
     //-------------------------------THREE.JS-----------------------------------------------
 //RENDERER
 const renderer = new THREE.WebGLRenderer();
