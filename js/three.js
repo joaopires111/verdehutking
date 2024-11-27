@@ -1,16 +1,20 @@
 //IMPORTS
 import * as THREE from 'three';
-import { GLTFLoader } from 'gtlf';
-const kingUrl = new URL('../assets/king.gltf', import.meta.url);
+import { GLTFLoader } from 'gtlf';  
+//import { OrbitControls } from 'orbit';
+const cadeiraUrl = new URL('../assets/cadeira.gltf', import.meta.url);
+const restauranteUrl = new URL('../assets/restaurante.gltf', import.meta.url);
 
     //-------------------------------Tabela Mesas------------------------------------------
 
     //-------------------------------THREE.JS-----------------------------------------------
 //RENDERER
 const renderer = new THREE.WebGLRenderer();
-//renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = true;
+
+//renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: Use a softer shadow type
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0xf1e0be);
+renderer.setClearColor(0xF2E8DF);
 document.body.appendChild(renderer.domElement);
 
 //CAMARA E SCENE
@@ -26,34 +30,60 @@ camera.lookAt(scene.position);
 console.log("espetáculo");
 
 //LUZES E EFEITOS
-const ambientlight = new THREE.AmbientLight(0x9d9d9d, 10);
+const ambientlight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientlight);
 
-const directionlight1 = new THREE.DirectionalLight(0x9d9d9d, 20);
-directionlight1.position.set(-3, 5, 0);
+const directionlight1 = new THREE.DirectionalLight(0xffffff, 0.5);
 scene.add(directionlight1);
+directionlight1.position.set(-3, 5, 0);
+directionlight1.castShadow = true;
 
+const dlighthelper1 = new THREE.CameraHelper(directionlight1.shadow.camera);
+scene.add(dlighthelper1);
 scene.fog = new THREE.FogExp2(0xffffff, 0.03);
 
-//MODELO 3D
+//--------------------------------------MODELO 3D-------------------------------------------
+var cadeira;
 const assetLoader = new GLTFLoader();
-assetLoader.load(kingUrl.href, function (gltf) {
-    const model = gltf.scene;
-    scene.add(model);
-    model.position.set(0, -1, 0);
+assetLoader.load(cadeiraUrl.href, function (gltf) {
+    cadeira = gltf.scene;
+    //porque as sombras nao se aplicao ao mesh inteiro
+    cadeira.traverse(function (child) {
+        if (child.isMesh) {
+            child.castShadow = true
+        }
+    });
+    scene.add(cadeira);
+    cadeira.castShadow = true; 
+    cadeira.position.set(0, 0.12, 0);
+    cadeira.scale.set(0.3, 0.3, 0.3);
+},
+    // called when loading is in progresses
+    function ( xhr ) {
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+},
+undefined, function (error) {
+    console.error(error);
+});
+assetLoader.load(restauranteUrl.href, function (gltf) {
+    //porque as sombras nao se aplicao ao mesh inteiro
+    gltf.scene.traverse(function (child) {
+        if (child.isMesh) {
+            child.receiveShadow = true;
+        }
+    });
+    gltf.scene.position.set(0, 0, 0);
+    gltf.scene.scale.set(0.2, 0.2, 0.2);
+    scene.add(gltf.scene);
 }, undefined, function (error) {
     console.error(error);
 });
 
-//INTERPOLAÇÃO LINEAR
-function lerp(x, y, a) {
-    return ((1 - a) * x + a * y);
-}
-/* Used to fit the lerps to start and end at specific scrolling percentages
-* eg, 65%
-* (65 - 60) / (80 - 60) = 5 / 20 = 25%
-* eg , 79%
-* (79 - 60) / (80 - 60) = 19 / 20 = 99% */
+/*OrbitControls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.update();*/
+//--------------------------SCROLL ANIMATION------------------------------
+
 function scalePercent(start, end) {
     return (scrollPercent - start) / (end - start);
 }
@@ -142,12 +172,3 @@ window.addEventListener('resize', function () {
 
 renderer.setAnimationLoop(animate);
 
-/* //POSSIVEL IDLE ANIMATION
-if(scene.rotation.x <=0.05 && estado == 1){
-    scene.rotateX(0.001);  
-    //console.log(scene.rotation.z);          
-} else if(estado == 1) estado = 2; 
-if (scene.rotation.x >= -0.05 && estado == 2){
-    scene.rotateX(-0.001);
-} else if (estado == 2) estado = 1;
- */
