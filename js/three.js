@@ -147,7 +147,6 @@ function playScrollAnimations() {
     })
 }
 
-//SCROLL PERCENTAGEM e visualização do mesmo
 let scrollPercent = 0;
 document.body.onscroll = () => {
     //calculate the current scroll progress as a percentage
