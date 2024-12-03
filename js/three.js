@@ -168,6 +168,5 @@ window.addEventListener('resize', function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
 })
 
-
 renderer.setAnimationLoop(animate);
 
