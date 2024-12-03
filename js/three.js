@@ -1,10 +1,10 @@
 //IMPORTS
 import * as THREE from 'three';
 import { GLTFLoader } from 'gtlf';
+const cadeiraUrl = new URL('../assets/models/cadeira.gltf', import.meta.url);
+const restauranteUrl = new URL('../assets/models/restaurante.gltf', import.meta.url);
+const mesaUrl = new URL('../assets/models/mesa.gltf', import.meta.url);
 //import { OrbitControls } from 'orbit';
-const cadeiraUrl = new URL('../assets/cadeira.gltf', import.meta.url);
-const restauranteUrl = new URL('../assets/restaurante.gltf', import.meta.url);
-const mesaUrl = new URL('../assets/mesa.gltf', import.meta.url);
 
 //VARIABLES
 const renderer = new THREE.WebGLRenderer();
@@ -14,8 +14,8 @@ const ambientlight = new THREE.AmbientLight(0xffffff, 0.5);
 const directionlight1 = new THREE.DirectionalLight(0xffffff, 0.5);
 const dlighthelper1 = new THREE.CameraHelper(directionlight1.shadow.camera);
 const assetLoader = new GLTFLoader();
-var cadeira;
 const animationScripts = [];
+let cadeira;
 
 //CODE
 function StartRenderer() {
@@ -85,14 +85,6 @@ function GLTFloader() {
     });
 }
 GLTFloader();
-
-/*function OPTIONALtestmodeorbit(){
-    OrbitControls
-const controls = new OrbitControls(
-camera, renderer.domElement
-);
-controls.update();
-}*/
 
 function scalePercent(start, end) {
     return (scrollPercent - start) / (end - start);
@@ -179,3 +171,10 @@ window.addEventListener('resize', function () {
 
 renderer.setAnimationLoop(animate);
 
+/*function OPTIONALtestmodeorbit(){
+    OrbitControls
+const controls = new OrbitControls(
+camera, renderer.domElement
+);
+controls.update();
+}*/
