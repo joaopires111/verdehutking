@@ -22,7 +22,7 @@ function fetchItems() {
                     <th><a class="btn btn-success btn-xl mt-5" onclick="deleteItem(${item.id})">apagar</a></th>
                     <th><a class="btn btn-success btn-xl mt-5" onclick="prepareUpdate(${item.id}, '${item.name}', '${item.description}')">editar</a></th>
                 `;
-                
+
                 list.appendChild(tr);
             });
         });
@@ -37,11 +37,11 @@ function createItem() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.message);
-        fetchItems();
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            fetchItems();
+        });
 }
 
 function deleteItem(id) {
@@ -50,11 +50,11 @@ function deleteItem(id) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.message);
-        fetchItems();
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            fetchItems();
+        });
 }
 
 function prepareUpdate(id, name, description) {
@@ -73,11 +73,11 @@ function updateItem() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, name, description })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.message);
-        fetchItems();
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            fetchItems();
+        });
 }
 
 // Fetch items on page load
