@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'gtlf';
 const restauranteUrl = new URL('../assets/models/restaurante.gltf', import.meta.url);
 const mesaUrl = new URL('../assets/models/mesa_cadeiras.gltf', import.meta.url);
+//DEBUG
 //import { OrbitControls } from 'orbit';
 
 //VARIABLES
@@ -16,8 +17,24 @@ const assetLoader = new GLTFLoader();
 const animationScripts = [];
 const nrmesas = 15;
 const clock = new THREE.Clock();
+let delta;
 const mesa = [];
 const mixer = [];
+const action = [];
+let scrollPercent = 0;
+const mouse = new THREE.Vector2();
+const intersectionpoint = new THREE.Vector3();
+const cubochair = [];
+const raycaster = new THREE.Raycaster();
+let arrow;
+const framerate = 30;
+let estado = false;
+let animatehover = -1;
+const starttime = 0;
+const endtime = 0.2;
+let lastanimatehover = -2;
+let rayoffon = true;
+
 
 //CODE
 function StartRenderer() {
@@ -34,7 +51,6 @@ StartRenderer();
 function CameraAndScene() {
     camera.position.set(0, 2, 2);
     camera.lookAt(scene.position);
-    console.log("espetáculo");
 }
 CameraAndScene();
 
@@ -52,45 +68,52 @@ lightsAndEffects();
 
 function GLTFloader() {
 
-    for (let i = 0; i <= 14; i++) {
+    for (let i = 0; i <= nrmesas - 1; i++) {
         assetLoader.load(mesaUrl.href, function (gltf) {
 
-            const index = mesa.length; // Ensure a unique index for each model
-            mesa[index] = gltf.scene;
-            scene.add(mesa[index]);
-        
-            // Create a mixer for this model
-            mixer[index] = new THREE.AnimationMixer(mesa[index]);
-        
-            // Play all animations for this model
-            gltf.animations.forEach((clip) => {
-                const action = mixer[index].clipAction(clip);
-                action.play();
+            mesa[i] = gltf.scene.clone();
+            scene.add(mesa[i]);
+            
+            console.log('mixer: '+ i);
+            mixer[i] = new THREE.AnimationMixer(mesa[i]);
+            gltf.animations.forEach((clip, c) => {
+                action[i*2 + c] = mixer[i].clipAction(clip);
+                //action[i*2 + c].setLoop(THREE.LoopOnce, 1); // Play once
+                //action[i*2 + c].clampWhenFinished = true;   // Clamp to the last frame when finished
+                action[i*2 + c].time = starttime;           // Start at the beginning
+                action[i*2 + c].setEffectiveTimeScale(5);  // Normal playback speed
+                action[i*2 + c].play();
+                console.log('action: ' + (i*2 + c));
             });
 
-            console.log(index);
 
-            mesa[index].traverse(function (child) {
+
+            mesa[i].traverse(function (child) {
                 if (child.isMesh) {
                     child.castShadow = true;
                 }
             });
 
-            mesa[index].castShadow = true;
-            if (index <= 4) {
-                mesa[index].position.set(index * 2 / 3 - 1.5, 0, -0.5);
-            } else if (index <= 9) {
-                mesa[index].position.set((index - 5) * 2 / 3 - 1.5, 0, 0.5);
+            mesa[i].castShadow = true;
+            if (i <= 4) {
+                mesa[i].position.set(i * 2 / 3 - 1.5, 0, -0.5);
+            } else if (i <= 9) {
+                mesa[i].position.set((i - 5) * 2 / 3 - 1.5, 0, 0.25);
             } else {
-                mesa[index].position.set((index - 10) * 2 / 3 - 1.5, 0, 0.25);
+                mesa[i].position.set((i - 10) * 2 / 3 - 1.5, 0, 0.5);
             }
+            mesa[i].scale.set(0.25, 0.25, 0.25);
 
-            mesa[index].scale.set(0.25, 0.25, 0.25);
+            cubochair[i] = new THREE.Box3().setFromObject(mesa[i]);
+            
+            //DEBUG
+            const boxHelper = new THREE.Box3Helper(cubochair[i], 0x00ff00); // TESTMODE
+            scene.add(boxHelper);
+
         },
-            // called when loading is in progresses
+
             function (xhr) {
                 console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-                if(mixer)console.log(mixer);
             },
             undefined, function (error) {
                 console.error(error);
@@ -122,13 +145,12 @@ function ScrollAnimation() {
         start: 0,
         end: 80,
         func: () => {
-
-            scene.rotation.y = Math.PI * scalePercent(0, 80);
+            estado = false;
+            scene.rotation.y = Math.PI* 2 * scalePercent(0, 80);
 
             //camera posicao 1 (0, 2, 2)
             //camera posicao 2 (0, 3, 0)
 
-            //ROTACAO DA CAMARA
             if (camera.position.y > 2) {
                 camera.lookAt(scene.position);
                 camera.position.y -= 0.02;
@@ -141,7 +163,7 @@ function ScrollAnimation() {
 
     animationScripts.push({
         start: 80,
-        end: 100,
+        end: 101,
         func: () => {
 
             //ROTACAO DA CAMARA para o topo
@@ -153,13 +175,40 @@ function ScrollAnimation() {
                 camera.position.z -= 0.04;
             }
             //acerto da rotacao da cena
-            if (scene.rotation.y < Math.PI) {
-                scene.rotation.y += 0.02;
+            if (scene.rotation.y < 2*Math.PI) {
+                scene.rotation.y += 0.01;
+            }else {
+                hovertableanimation();
             }
         },
     });
 }
 ScrollAnimation();
+
+function hovertableanimation(){
+    raycaster.setFromCamera(mouse, camera);
+    //DEBUG
+    //arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
+    //scene.add(arrow);
+    
+    console.log(animatehover);
+    if(rayoffon){
+    cubochair.forEach((c, i) => {
+        if (raycaster.ray.intersectsBox(c)) {
+            animatehover = i;
+        }
+    });
+}
+}
+
+window.addEventListener('mousemove', function (e) {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+window.addEventListener('click', function (e) {
+
+});
 
 function playScrollAnimations() {
     animationScripts.forEach((a) => {
@@ -169,7 +218,6 @@ function playScrollAnimations() {
     })
 }
 
-let scrollPercent = 0;
 document.body.onscroll = () => {
     scrollPercent =
         (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
@@ -177,18 +225,31 @@ document.body.onscroll = () => {
         'Scroll Progress : ' + scrollPercent.toFixed(2)
 }
 
+function playanimatehover(){
 
+    if(action[animatehover*2].time <= 2){
+        delta = clock.getDelta();
+        mixer[animatehover].update(delta);
+        rayoffon = false;
+    }
+    else{
+        action[animatehover*2].time = starttime;
+        action[animatehover*2+1].time = starttime;
+        lastanimatehover = animatehover;
+        animatehover = -1;
+        rayoffon = true;
+    }    
+
+        
+}
 
 function animate() {
-
     playScrollAnimations();
+    if (animatehover > -1 && animatehover != lastanimatehover){
+        playanimatehover();
+    } 
 
-    mixer.forEach((m) => {
-        if (m) { // Ensure the mixer is valid
-            m.update(clock.getDelta());
-        }
-    });
-
+    
     renderer.render(scene, camera);
 }
 
@@ -200,6 +261,7 @@ window.addEventListener('resize', function () {
 
 renderer.setAnimationLoop(animate);
 
+//DEBUG
 /*function OPTIONALtestmodeorbit(){
     OrbitControls
 const controls = new OrbitControls(
