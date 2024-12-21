@@ -49,6 +49,22 @@
         </h6>
         <a class="btn btn-success btn-xl mt-5" href="#page-top">voltar a inicio</a>
     </section>
+    <section id="reserva" class="container px-4 px-lg-5 text-center">
+
+        <h1>Reservas</h1>
+        <form action="./php/reservas/process.php" method="POST">
+            <label for="choices2">Escolha o dia:</label>
+            <input type="date" id="choices2" name="choices2" required>
+    
+            <label for="choices1">Escolha o horário:</label>
+            <select id="choices1" name="choices1" required>
+                <option value="Almoço">Almoço</option>
+                <option value="Jantar">Jantar</option>
+            </select>
+            <button type="submit">Aplicar</button>
+        </form>
+
+    </section>
 
     <footer class="footer text-center container px-4 px-lg-5">
         <p class="text-muted small mb-0">

@@ -34,6 +34,7 @@ const starttime = 0;
 const endtime = 0.2;
 let lastanimatehover = -2;
 let rayoffon = true;
+const greenmat = new THREE.MeshStandardMaterial({color: 0xff0000});
 
 
 //CODE
@@ -107,8 +108,8 @@ function GLTFloader() {
             cubochair[i] = new THREE.Box3().setFromObject(mesa[i]);
             
             //DEBUG
-            const boxHelper = new THREE.Box3Helper(cubochair[i], 0x00ff00); // TESTMODE
-            scene.add(boxHelper);
+            //const boxHelper = new THREE.Box3Helper(cubochair[i], 0x00ff00); // TESTMODE
+            //scene.add(boxHelper);
 
         },
 
@@ -191,7 +192,7 @@ function hovertableanimation(){
     //arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
     //scene.add(arrow);
     
-    console.log(animatehover);
+    //console.log(animatehover);
     if(rayoffon){
     cubochair.forEach((c, i) => {
         if (raycaster.ray.intersectsBox(c)) {
@@ -207,6 +208,15 @@ window.addEventListener('mousemove', function (e) {
 });
 
 window.addEventListener('click', function (e) {
+    cubochair.forEach((c, i) => {
+        if (raycaster.ray.intersectsBox(c)) {
+            mesa[i].traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = greenmat;
+                }
+            });
+        }
+    });
 
 });
 
