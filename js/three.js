@@ -212,7 +212,7 @@ window.addEventListener('click', function (e) {
         if (raycaster.ray.intersectsBox(c)) {
             mesa[i].traverse(function (child) {
                 if (child.isMesh) {
-                    child.material = greenmat;
+                    //child.material = greenmat;
                 }
             });
         }

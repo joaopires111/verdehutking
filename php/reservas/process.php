@@ -28,6 +28,7 @@ if ($result->num_rows > 0) {
                 <th>Dia</th>
                 <th>Horário</th>
                 <th>nome</th>
+                <th>Mesa</th>
             </tr>";
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
@@ -35,6 +36,7 @@ if ($result->num_rows > 0) {
                 <td>{$row['dia']}</td>
                 <td>{$row['horario']}</td>
                 <td>{$row['nome']}</td>
+                <td>{$row['mesa']}</td>
               </tr>";
     }
     echo "</table>";
