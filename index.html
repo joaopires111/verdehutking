@@ -35,8 +35,8 @@
         <h6 class="mb-5"><em>Somos um restaurante vegano no centro do Porto, vem nos conhecer !<p></em></h3>
             <a class="btn btn-success btn-xl mt-5 " href="#callout">Contactos</a>
 
-    </section>
-    <!-- admin pratos CRUD LIST 
+    <!--</section>
+    admin pratos CRUD LIST 
     <div id="admincrud"></div>-->
 
     <section id="callout" class="container px-4 px-lg-5 text-center">
@@ -52,17 +52,20 @@
     <section id="reserva" class="container px-4 px-lg-5 text-center">
 
         <h1>Reservas</h1>
-        <form action="./php/reservas/process.php" method="POST">
-            <label for="choices2">Escolha o dia:</label>
-            <input type="date" id="choices2" name="choices2" required>
+        <form>
+            <label for="dia">Escolha o dia:</label>
+            <input type="date" id="dia" name="dia" required>
     
-            <label for="choices1">Escolha o horário:</label>
-            <select id="choices1" name="choices1" required>
-                <option value="Almoço">Almoço</option>
-                <option value="Jantar">Jantar</option>
+            <label for="horario">Escolha o horário:</label>
+            <select id="horario" name="horario" required>
+                <option value="almoco">almoço</option>
+                <option value="jantar">jantar</option>
             </select>
-            <button type="submit">Aplicar</button>
         </form>
+        <button onclick="aplicar()">Aplicar</button>
+        <button onclick="toggleverreservas()">todas as reservas</button>
+        <table id="todas_reservas" class="table table-dark table-hover">
+        </table>
 
     </section>
 
@@ -73,10 +76,9 @@
     </footer>
 
 
-    <script src="./js/three.js" type="module"></script>
+    <script src="./js/db_reservas.js"></script>
     <script src="./js/three.js" type="module"></script>
     <script>$(function () { $("#admincrud").load("admin.html"); });</script>
-
 </body>
 
 </html>

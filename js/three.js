@@ -34,7 +34,8 @@ const starttime = 0;
 const endtime = 0.2;
 let lastanimatehover = -2;
 let rayoffon = true;
-const greenmat = new THREE.MeshStandardMaterial({color: 0xff0000});
+const greenmat = new THREE.MeshStandardMaterial({color: 0x00bb00});
+const redmat = new THREE.MeshStandardMaterial({color: 0xbb0000});
 
 
 //CODE
@@ -212,11 +213,12 @@ window.addEventListener('click', function (e) {
         if (raycaster.ray.intersectsBox(c)) {
             mesa[i].traverse(function (child) {
                 if (child.isMesh) {
-                    //child.material = greenmat;
+                    child.material = greenmat;
                 }
             });
         }
     });
+    checkreserva();
 
 });
 
@@ -248,19 +250,25 @@ function playanimatehover(){
         lastanimatehover = animatehover;
         animatehover = -1;
         rayoffon = true;
-    }    
-
-        
+    }            
 }
 
 function animate() {
     playScrollAnimations();
     if (animatehover > -1 && animatehover != lastanimatehover){
         playanimatehover();
-    } 
-
-    
+    }
     renderer.render(scene, camera);
+}
+
+function checkreserva(){
+    tempmesas.forEach(i => {
+        mesa[i].traverse(function (child) {
+            if (child.isMesh) {
+                child.material = redmat;
+            }
+        });
+    });
 }
 
 window.addEventListener('resize', function () {

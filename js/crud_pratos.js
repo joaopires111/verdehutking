@@ -5,8 +5,8 @@ function fetchItems() {
         .then(items => {
             const list = document.getElementById('items-list');
             list.innerHTML = `        
-            <thead>
             <tr>
+            <thead>
             <th>id</th>
             <th>nome</th>
             <th>descrição</th>
