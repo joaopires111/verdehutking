@@ -34,8 +34,11 @@ const starttime = 0;
 const endtime = 0.2;
 let lastanimatehover = -2;
 let rayoffon = true;
-const greenmat = new THREE.MeshStandardMaterial({color: 0x00bb00});
-const redmat = new THREE.MeshStandardMaterial({color: 0xbb0000});
+const greenmat = new THREE.MeshStandardMaterial({ color: 0x00bb00 });
+const redmat = new THREE.MeshStandardMaterial({ color: 0xbb0000 });
+let originmat;
+let tempmesas = [];
+
 
 
 //CODE
@@ -75,17 +78,14 @@ function GLTFloader() {
 
             mesa[i] = gltf.scene.clone();
             scene.add(mesa[i]);
-            
-            console.log('mixer: '+ i);
             mixer[i] = new THREE.AnimationMixer(mesa[i]);
             gltf.animations.forEach((clip, c) => {
-                action[i*2 + c] = mixer[i].clipAction(clip);
+                action[i * 2 + c] = mixer[i].clipAction(clip);
                 //action[i*2 + c].setLoop(THREE.LoopOnce, 1); // Play once
                 //action[i*2 + c].clampWhenFinished = true;   // Clamp to the last frame when finished
-                action[i*2 + c].time = starttime;           // Start at the beginning
-                action[i*2 + c].setEffectiveTimeScale(5);  // Normal playback speed
-                action[i*2 + c].play();
-                console.log('action: ' + (i*2 + c));
+                action[i * 2 + c].time = starttime;           // Start at the beginning
+                action[i * 2 + c].setEffectiveTimeScale(5);  // Normal playback speed
+                action[i * 2 + c].play();
             });
 
 
@@ -93,6 +93,7 @@ function GLTFloader() {
             mesa[i].traverse(function (child) {
                 if (child.isMesh) {
                     child.castShadow = true;
+                    originmat = child.material;
                 }
             });
 
@@ -107,7 +108,7 @@ function GLTFloader() {
             mesa[i].scale.set(0.25, 0.25, 0.25);
 
             cubochair[i] = new THREE.Box3().setFromObject(mesa[i]);
-            
+
             //DEBUG
             //const boxHelper = new THREE.Box3Helper(cubochair[i], 0x00ff00); // TESTMODE
             //scene.add(boxHelper);
@@ -148,7 +149,7 @@ function ScrollAnimation() {
         end: 80,
         func: () => {
             estado = false;
-            scene.rotation.y = Math.PI* 2 * scalePercent(0, 80);
+            scene.rotation.y = Math.PI * 2 * scalePercent(0, 80);
 
             //camera posicao 1 (0, 2, 2)
             //camera posicao 2 (0, 3, 0)
@@ -177,9 +178,9 @@ function ScrollAnimation() {
                 camera.position.z -= 0.04;
             }
             //acerto da rotacao da cena
-            if (scene.rotation.y < 2*Math.PI) {
+            if (scene.rotation.y < 2 * Math.PI) {
                 scene.rotation.y += 0.01;
-            }else {
+            } else {
                 hovertableanimation();
             }
         },
@@ -187,20 +188,20 @@ function ScrollAnimation() {
 }
 ScrollAnimation();
 
-function hovertableanimation(){
+function hovertableanimation() {
     raycaster.setFromCamera(mouse, camera);
     //DEBUG
     //arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
     //scene.add(arrow);
-    
+
     //console.log(animatehover);
-    if(rayoffon){
-    cubochair.forEach((c, i) => {
-        if (raycaster.ray.intersectsBox(c)) {
-            animatehover = i;
-        }
-    });
-}
+    if (rayoffon) {
+        cubochair.forEach((c, i) => {
+            if (raycaster.ray.intersectsBox(c)) {
+                animatehover = i;
+            }
+        });
+    }
 }
 
 window.addEventListener('mousemove', function (e) {
@@ -218,9 +219,51 @@ window.addEventListener('click', function (e) {
             });
         }
     });
-    checkreserva();
-
 });
+
+export function aplicar(dia, horario) {
+    fetch('../php/reservas/read.php')
+        .then(response => response.json())
+        .then(items => {
+            for (let i = 0; i <= 14; i++) {
+                tempmesas[i] = false;
+            }
+
+            if (items.length > 0) {
+                items.forEach(item => {
+                    if (item.dia == dia && item.horario == horario) {
+                        tempmesas[item.mesa] = true;
+                    }
+                });
+            }
+            console.log(tempmesas);
+        })
+        .then(() => {
+            checkreserva();
+          })
+}
+
+window.aplicar = aplicar;
+
+function checkreserva() {
+    mesa.forEach((m, i) => {
+        if (tempmesas[i]) {
+            m.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = redmat;
+                }
+            });
+        }
+        else {
+            m.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = originmat;
+                }
+            });
+        }
+    });
+    console.log("CHECKINGS !!");
+}
 
 function playScrollAnimations() {
     animationScripts.forEach((a) => {
@@ -237,38 +280,29 @@ document.body.onscroll = () => {
         'Scroll Progress : ' + scrollPercent.toFixed(2)
 }
 
-function playanimatehover(){
+function playanimatehover() {
 
-    if(action[animatehover*2].time <= 2){
+    if (action[animatehover * 2].time <= 2) {
         delta = clock.getDelta();
         mixer[animatehover].update(delta);
         rayoffon = false;
     }
-    else{
-        action[animatehover*2].time = starttime;
-        action[animatehover*2+1].time = starttime;
+    else {
+        action[animatehover * 2].time = starttime;
+        action[animatehover * 2 + 1].time = starttime;
         lastanimatehover = animatehover;
         animatehover = -1;
         rayoffon = true;
-    }            
+    }
 }
 
 function animate() {
+
     playScrollAnimations();
-    if (animatehover > -1 && animatehover != lastanimatehover){
+    if (animatehover > -1 && animatehover != lastanimatehover) {
         playanimatehover();
     }
     renderer.render(scene, camera);
-}
-
-function checkreserva(){
-    tempmesas.forEach(i => {
-        mesa[i].traverse(function (child) {
-            if (child.isMesh) {
-                child.material = redmat;
-            }
-        });
-    });
 }
 
 window.addEventListener('resize', function () {

@@ -1,6 +1,6 @@
 
-var vertodason = false;
-var tempmesas = [];
+let vertodason = false;
+
 
 function toggleverreservas(){
     if (!vertodason){
@@ -68,22 +68,4 @@ function deleteReserv(id) {
         });
 }
 
-function aplicar(){
-    const dia = document.getElementById('dia').value;
-    const horario = document.getElementById('horario').value;
-    fetch('../php/reservas/read.php')
-    .then(response => response.json())
-    .then(items => {
-        tempmesas = [];
-
-        if(items.length > 0){
-        items.forEach((item, i) => {
-            if(item.dia == dia && item.horario == horario){
-            tempmesas[i] = item.mesa;
-        }
-        });
-        }
-        console.log(tempmesas);
-    });
-}
 
