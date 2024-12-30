@@ -1,10 +1,11 @@
 <!-- CRUD LIST -->
-<section class="container px-4 pt-lg-3 text-center">
+<section class="d-flex flex-column align-items-center">
+    <div class="bg-success m-3">
     <h1 class="text-success">lista pratos ADMIN
     </h1>
     <h2>lista total pratos</h2>
     <!-- Item List -->
-    <table id="items-list" class="table-dark table-hover table-striped">
+    <table id="items-list" class="table-dark table-hover table-striped table-bordered">
     </table>
     <!-- Create Item -->
     <h2>criar prato</h2>
@@ -22,5 +23,6 @@
         <th><textarea id="update-description" placeholder="atualizar descrição"></textarea></th>
         <th><a class="btn btn-success btn-xl mt-5" onclick="updateItem()">editar</a></th>
     </table>
+</div>
 </section>
 <script src="./js/crud_pratos.js"></script>

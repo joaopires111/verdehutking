@@ -1,8 +1,4 @@
-body {
-  margin: 0px;
-  overflow-x: hidden;
-  z-index: 0;
-}
+
 
 section {
   min-height: 95vh;
@@ -16,7 +12,7 @@ canvas {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;/* Keeps this content in the back*/
+  z-index: -2;/* Keeps this content in the back*/
 }
 
 #scrollProgress {
