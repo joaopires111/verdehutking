@@ -1,10 +1,8 @@
 
 
 section {
-  min-height: 95vh;
-  padding: 30px;
+  min-height: 100vh;
   font-size: 3vh;
-  color: #595654;
 }
 
 /*CANVAS DO THREE.js*/

@@ -39,10 +39,11 @@
             <a class="btn btn-success btn-xl mt-5 " href="#callout">Contactos</a>
 
     </section>
-    admin pratos CRUD LIST 
-    <div id="admincrud"></div>
+    <!--admin pratos CRUD LIST
+    <div id="admincrud"></div>--> 
 
-    <section id="callout" class="container px-4 px-lg-5 text-center">
+    <section id="callout" class="d-flex justify-content-center align-items-center">
+      <div class="text-center">
         <h6 class="mb-3">
             Contacto : +351 920 505 245
         </h6>
@@ -51,26 +52,28 @@
                 Porto </a>
         </h6>
         <a class="btn btn-success btn-xl mt-5" href="#page-top">voltar a inicio</a>
+      </div>
     </section>
-    <section id="reserva" class="d-flex flex-column align-items-center">
 
-        <h1>Reservas</h1>
+    <section id="reserva" class="d-flex flex-column align-items-center mt-5">
+
+        <h1 class="mt-4">Reservas</h1>
         <div>
             <label for="dia">Escolha o dia:</label>
-            <input type="date" id="dia" name="dia" onchange="aplicar(this.value, document.getElementById('horario').value);" required>
+            <input type="date" id="dia" name="dia" onchange="aplicar(this.value, document.getElementById('horario').value);updatetodas();" required>
     
             <label for="horario">Escolha o horário:</label>
-            <select id="horario" name="horario" onchange="aplicar(document.getElementById('dia').value, this.value);" required>
+            <select id="horario" name="horario" onchange="aplicar(document.getElementById('dia').value, this.value);updatetodas();" required>
                 <option value="almoco">almoço</option>
                 <option value="jantar">jantar</option>
             </select>
         <button onclick="toggleverreservas()">todas as reservas</button>
-        <table id="todas_reservas" class="table table-dark table-hover">
-        </table>
+        <div id="todas_reservas">
+        </div>
     </div>
 
     <!-- Button trigger modal -->
-<button type="button" class="mt-auto" data-toggle="modal" data-target="#exampleModalCenter">fazer reserva</button>
+<button type="button" class="mt-auto mb-5" data-toggle="modal" data-target="#exampleModalCenter">fazer reserva</button>
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

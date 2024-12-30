@@ -2,12 +2,12 @@
 let vertodason = false;
 
 
-function toggleverreservas(){
-    if (!vertodason){
+function toggleverreservas() {
+    if (!vertodason) {
         vertodas();
         vertodason = true;
     }
-    else if (vertodason){
+    else if (vertodason) {
         vernenhuma();
         vertodason = false;
     }
@@ -23,6 +23,8 @@ function vertodas() {
         .then(items => {
             const list = document.getElementById('todas_reservas');
             list.innerHTML = `
+            <div class="rounded-3 border overflow-hidden mt-2">
+            <table class="table table-hover table-bordered text-center align-middle mb-0">
             <thead>
             <th>id</th>
             <th>nome</th>
@@ -30,29 +32,48 @@ function vertodas() {
             <th>mesa</th>
             <th>dia</th>
             <th>horario</th>
-            </thead>     
+            <th>apagar</th>
+            </thead>
+            <tbody id="table-body2"></tbody>
+            </table>
+            </div>     
         `;
+
+            // Get the tbody element for appending rows
+            const tableBody = document.getElementById('table-body2');
+
             items.forEach(item => {
 
-                if(item.dia == dia && item.horario == horario){
+                if (item.dia == dia && item.horario == horario) {
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                <tbody>
-                    <th>${item.id}</th><th>${item.nome}</th><th>${item.telemovel}</th><th>${item.mesa}</th><th>${item.dia}</th><th>${item.horario}</th>
-                    <th><a class="btn btn-success btn-xl mt-5" onclick="deleteReserv(${item.id})">apagar</a></th>
-                </tbody>
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.nome}</td>
+                    <td>${item.telemovel}</td>
+                    <td>${item.mesa}</td>
+                    <td>${item.dia}</td>
+                    <td>${item.horario}</td>
+                    <td>
+                    <a class="btn btn-danger" onclick="deleteReserv(${item.id})">apagar</a>
+                    </td>
                     `;
 
-                list.appendChild(tr);
-            
+                    tableBody.appendChild(tr);
+
                 }
             });
-        });
+        })
+        .catch(error => console.error('Error fetching items:', error));
 }
 function vernenhuma() {
     const list = document.getElementById('todas_reservas');
     list.innerHTML = ``;
+}
+function updatetodas(){
+    if(vertodas){
+        vertodas();
+    }
 }
 
 function deleteReserv(id) {
