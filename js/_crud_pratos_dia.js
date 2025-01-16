@@ -1,24 +1,10 @@
-
-    let vertodason = false;
-
-
-function toggleverreservas() {
-    if (!vertodason) {
-        vertodas();
-        vertodason = true;
-    }
-    else if (vertodason) {
-        vernenhuma();
-        vertodason = false;
-    }
-}
-function vertodas() {
+function verpratosdia() {
     const dia = document.getElementById('dia').value;
     const horario = document.getElementById('horario').value;
 
     console.log(dia);
     console.log(horario);
-    fetch('../php/reservas/read.php')
+    fetch('../php/pratos_dia/read.php')
         .then(response => response.json())
         .then(items => {
             const list = document.getElementById('todas_reservas');
@@ -66,27 +52,3 @@ function vertodas() {
         })
         .catch(error => console.error('Error fetching items:', error));
 }
-function vernenhuma() {
-    const list = document.getElementById('todas_reservas');
-    list.innerHTML = ``;
-}
-function updatetodas(){
-    if(vertodason){
-        vertodas();
-    }
-}
-
-function deleteReserv(id) {
-    fetch('../php/reservas/delete.php', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            vertodas();
-        });
-}
-
-

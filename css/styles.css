@@ -3,7 +3,26 @@
 section {
   min-height: 100vh;
   font-size: 3vh;
+  display: flex;
 }
+
+    /* Fixed Buttons */
+    .nav-button {
+      position: fixed;
+      left: 10px;
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: #34495e;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
 /*CANVAS DO THREE.js*/
 canvas {
@@ -15,9 +34,70 @@ canvas {
 
 #scrollProgress {
   position: fixed;
-  bottom: 10px;
-  left: 10px;
-  z-index: 1;
-  font-size: 3vh;
+  bottom: 100px;
+  left: 100px;
+  z-index: 3;
+  font-size: 4vh;
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+    /* Fixed Buttons */
+    .nav-button {
+      position: fixed;
+      left: 10px;
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: #34495e;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-button:active {
+      transform: scale(0.95);
+    }
+
+    .nav-button.up {
+      top: 20px;
+    }
+
+    .nav-button.down {
+      bottom: 20px;
+    }
+
+    /* Side Indicator */
+    .indicator {
+      position: fixed;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .indicator span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .indicator span.active {
+      opacity: 1;
+      transform: scale(1.2);
+    }
 

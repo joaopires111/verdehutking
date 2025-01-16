@@ -38,6 +38,122 @@ const greenmat = new THREE.MeshStandardMaterial({ color: 0x00bb00 });
 const redmat = new THREE.MeshStandardMaterial({ color: 0xbb0000 });
 let originmat;
 let tempmesas = [];
+export let mesaselecionada = [];
+window.mesaselecionada = mesaselecionada;
+let modalon = true;
+let currentSection = 0;
+for (let i = 0; i <= 14; i++) {
+    mesaselecionada[i] = false;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.section');
+    const btnUp = document.getElementById('btnUp');
+    const btnDown = document.getElementById('btnDown');
+    const indicators = document.querySelectorAll('.indicator span');
+    const scrollProgress = document.getElementById('scrollProgress');
+
+    let currentSection = 0;
+    let scrolling = false; // Prevents rapid scroll jumps
+
+    function smoothScrollTo(targetPosition, duration = 800) {
+        const startPosition = window.scrollY;
+        const distance = targetPosition - startPosition;
+        const startTime = performance.now();
+
+        function animationStep(currentTime) {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
+            
+            window.scrollTo(0, startPosition + distance * easeInOutQuad(progress));
+
+            if (progress < 1) {
+                requestAnimationFrame(animationStep);
+            } else {
+                scrolling = false; // Allow next scroll event
+            }
+        }
+
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        }
+
+        requestAnimationFrame(animationStep);
+    }
+
+    function updateView() {
+        if (scrolling) return; // Prevents spam scrolling
+
+        scrolling = true;
+        const targetPosition = sections[currentSection].getBoundingClientRect().top + window.scrollY;
+        smoothScrollTo(targetPosition, 800);
+
+        // Update indicator
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentSection);
+        });
+
+        // Update scroll percentage
+        let scrollPercent = ((currentSection) / (sections.length - 1)) * 100;
+        scrollProgress.innerText = 'Scroll Progress: ' + scrollPercent.toFixed(2) + '%';
+    }
+
+    btnUp.addEventListener('click', () => {
+        if (currentSection > 0) {
+            currentSection--;
+            updateView();
+        }
+    });
+
+    btnDown.addEventListener('click', () => {
+        if (currentSection < sections.length - 1) {
+            currentSection++;
+            updateView();
+        }
+    });
+
+    // Detect scroll wheel movement
+    window.addEventListener('wheel', (event) => {
+        if (scrolling) return; // Prevent spam scrolling
+
+        if (event.deltaY > 0 && currentSection < sections.length - 1) {
+            // Scrolling down
+            currentSection++;
+        } else if (event.deltaY < 0 && currentSection > 0) {
+            // Scrolling up
+            currentSection--;
+        }
+        updateView();
+    });
+
+    // Detect touch scrolling (for mobile)
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (event) => {
+        touchStartY = event.touches[0].clientY;
+    });
+
+    window.addEventListener('touchend', (event) => {
+        if (scrolling) return;
+
+        let touchEndY = event.changedTouches[0].clientY;
+        let deltaY = touchStartY - touchEndY;
+
+        if (deltaY > 50 && currentSection < sections.length - 1) {
+            // Swipe up (scroll down)
+            currentSection++;
+        } else if (deltaY < -50 && currentSection > 0) {
+            // Swipe down (scroll up)
+            currentSection--;
+        }
+        updateView();
+    });
+
+    // Disable manual scrolling
+    document.body.style.overflow = 'hidden';
+
+    // Initialize view
+    updateView();
+});
 
 
 
@@ -62,7 +178,7 @@ CameraAndScene();
 function lightsAndEffects() {
     scene.add(ambientlight);
     scene.add(directionlight1);
-    scene.add(dlighthelper1);
+    //scene.add(dlighthelper1);
 
     directionlight1.position.set(-3, 5, 0);
     directionlight1.castShadow = true;
@@ -88,8 +204,6 @@ function GLTFloader() {
                 action[i * 2 + c].play();
             });
 
-
-
             mesa[i].traverse(function (child) {
                 if (child.isMesh) {
                     child.castShadow = true;
@@ -112,7 +226,6 @@ function GLTFloader() {
             //DEBUG
             //const boxHelper = new THREE.Box3Helper(cubochair[i], 0x00ff00); // TESTMODE
             //scene.add(boxHelper);
-
         },
 
             function (xhr) {
@@ -210,15 +323,28 @@ window.addEventListener('mousemove', function (e) {
 });
 
 window.addEventListener('click', function (e) {
+    if(modalon){
     cubochair.forEach((c, i) => {
-        if (raycaster.ray.intersectsBox(c)) {
-            mesa[i].traverse(function (child) {
-                if (child.isMesh) {
-                    child.material = greenmat;
-                }
-            });
+        if (raycaster.ray.intersectsBox(c) && !tempmesas[i]) {
+            if (!mesaselecionada[i]) {
+                mesa[i].traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = greenmat;
+                    }
+                });
+                mesaselecionada[i] = true;
+            } else{
+
+                mesa[i].traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = originmat;
+                    }
+                });
+                mesaselecionada[i] = false;
+            }
         }
     });
+}
 });
 
 export function aplicar(dia, horario) {
@@ -228,7 +354,6 @@ export function aplicar(dia, horario) {
             for (let i = 0; i <= 14; i++) {
                 tempmesas[i] = false;
             }
-
             if (items.length > 0) {
                 items.forEach(item => {
                     if (item.dia == dia && item.horario == horario) {
@@ -240,10 +365,8 @@ export function aplicar(dia, horario) {
         })
         .then(() => {
             checkreserva();
-          })
+        })
 }
-
-window.aplicar = aplicar;
 
 function checkreserva() {
     mesa.forEach((m, i) => {
@@ -265,6 +388,50 @@ function checkreserva() {
     console.log("CHECKINGS !!");
 }
 
+export function fazerreserva(nome, telemovel, dia, horario) {
+    mesaselecionada.forEach((m , i) => {
+        if(m){
+            fetch('../php/reservas/create.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({nome, telemovel, i, dia, horario})
+            })
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text(); // Read response as plain text
+              })
+                .then(() => {
+                        mesa[i].traverse(function (child) {
+                            if (child.isMesh) {
+                                child.material = redmat;
+                            }
+                        });
+                    m = false; 
+                    console.log("ESTADO DA MESA "+i+" "+m);
+                });
+        }
+    });
+}
+
+export function restartmodal(){
+    setTimeout(() => {
+        modalon = true;
+        console.log("MODAL ON");
+      }, 100);
+}
+
+export function cancelmodal(){
+        modalon = false;
+        console.log("MODAL OFF");
+}
+
+window.cancelmodal = cancelmodal;
+window.restartmodal = restartmodal;
+window.fazerreserva = fazerreserva;
+window.aplicar = aplicar;
+
 function playScrollAnimations() {
     animationScripts.forEach((a) => {
         if (scrollPercent >= a.start && scrollPercent < a.end) {
@@ -278,7 +445,7 @@ document.body.onscroll = () => {
         (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
     document.getElementById('scrollProgress').innerText =
         'Scroll Progress : ' + scrollPercent.toFixed(2)
-}
+} 
 
 function playanimatehover() {
 
@@ -291,13 +458,13 @@ function playanimatehover() {
         action[animatehover * 2].time = starttime;
         action[animatehover * 2 + 1].time = starttime;
         lastanimatehover = animatehover;
+        console.log("hover: " +animatehover);
         animatehover = -1;
         rayoffon = true;
     }
 }
 
 function animate() {
-
     playScrollAnimations();
     if (animatehover > -1 && animatehover != lastanimatehover) {
         playanimatehover();

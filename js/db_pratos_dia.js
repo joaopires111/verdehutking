@@ -1,46 +1,46 @@
 
-    let vertodason = false;
+    let vertodoson = false;
 
 
-function toggleverreservas() {
-    if (!vertodason) {
-        vertodas();
-        vertodason = true;
+function togglepratosdia() {
+    if (!vertodoson) {
+        vertodos();
+        vertodoson = true;
     }
-    else if (vertodason) {
-        vernenhuma();
-        vertodason = false;
+    else if (vertodoson) {
+        vernenhum();
+        vertodoson = false;
     }
 }
-function vertodas() {
+function vertodos() {
     const dia = document.getElementById('dia').value;
     const horario = document.getElementById('horario').value;
 
     console.log(dia);
     console.log(horario);
-    fetch('../php/reservas/read.php')
+    fetch('../php/pratos_dia/read.php')
         .then(response => response.json())
         .then(items => {
-            const list = document.getElementById('todas_reservas');
+            const list = document.getElementById('todos_pratos_dia');
             list.innerHTML = `
             <div class="rounded-3 border overflow-hidden mt-2">
             <table class="table table-hover table-bordered text-center align-middle mb-0">
             <thead>
             <th>id</th>
-            <th>nome</th>
-            <th>telemovel</th>
-            <th>mesa</th>
+            <th>prato quente</th>
+            <th>salada</th>
+            <th>entrada</th>
             <th>dia</th>
             <th>horario</th>
             <th>apagar</th>
             </thead>
-            <tbody id="table-body2"></tbody>
+            <tbody id="table-body3"></tbody>
             </table>
             </div>     
         `;
 
             // Get the tbody element for appending rows
-            const tableBody = document.getElementById('table-body2');
+            const tableBody = document.getElementById('table-body3');
 
             items.forEach(item => {
 
@@ -49,9 +49,9 @@ function vertodas() {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                     <td>${item.id}</td>
-                    <td>${item.nome}</td>
-                    <td>${item.telemovel}</td>
-                    <td>${item.mesa}</td>
+                    <td>${item.id_prato_quente}</td>
+                    <td>${item.id_salada}</td>
+                    <td>${item.id_entrada}</td>
                     <td>${item.dia}</td>
                     <td>${item.horario}</td>
                     <td>
@@ -66,18 +66,18 @@ function vertodas() {
         })
         .catch(error => console.error('Error fetching items:', error));
 }
-function vernenhuma() {
-    const list = document.getElementById('todas_reservas');
+function vernenhum() {
+    const list = document.getElementById('todos_pratos_dia');
     list.innerHTML = ``;
 }
-function updatetodas(){
-    if(vertodason){
-        vertodas();
+function updatetodos(){
+    if(vertodoson){
+        vertodos();
     }
 }
 
 function deleteReserv(id) {
-    fetch('../php/reservas/delete.php', {
+    fetch('../php/pratos_dia/delete.php', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -85,7 +85,7 @@ function deleteReserv(id) {
         .then(response => response.json())
         .then(data => {
             console.log(data.message);
-            vertodas();
+            vertodos();
         });
 }
 

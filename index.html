@@ -24,25 +24,29 @@
 
 </head>
 
-
 <body>
+     <!-- Navigation Buttons -->
+  <button class="btn btn-dark position-fixed top-0 start-0 m-3 rounded-circle" id="btnUp">
+    ↑<i class="bi bi-arrow-up"></i>
+  </button>
+  <button class="btn btn-dark position-fixed bottom-0 start-0 m-3 rounded-circle" id="btnDown">
+    ↓<i class="bi bi-arrow-down"></i>
+  </button>
+  <span id="scrollProgress"></span>
 
-    <span id="scrollProgress"></span>
+  <!-- Side Indicator -->
+  <div class="indicator">
+    <span class="active"></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
-    <section id="page-top" class="container px-4 pt-lg-5 text-center">
-        <img src="assets\img\so texto verde hut.png" alt="verdehutlogo" width="30%" height="30%">
-
-        <p></p>
-        <h3 class="mb-4"><em>O VerdeHut está agora aberto !</em></h3>
-
-        <h6 class="mb-5"><em>Somos um restaurante vegano no centro do Porto, vem nos conhecer !<p></em></h3>
-            <a class="btn btn-success btn-xl mt-5 " href="#callout">Contactos</a>
-
+    <section id="inicio" class="section d-flex flex-column align-items-center">
+        <img src="assets\img\so texto verde hut.png" class="mt-5" alt="verdehutlogo" width="30%" height="30%">
     </section>
-    <!--admin pratos CRUD LIST
-    <div id="admincrud"></div>--> 
 
-    <section id="callout" class="d-flex justify-content-center align-items-center">
+    <section id="contactos" class="section d-flex justify-content-center align-items-center">
       <div class="text-center">
         <h6 class="mb-3">
             Contacto : +351 920 505 245
@@ -54,60 +58,84 @@
         <a class="btn btn-success btn-xl mt-5" href="#page-top">voltar a inicio</a>
       </div>
     </section>
+        <!--admin pratos CRUD LIST
+    <section><div id="admincrud"></div></section>-->
 
-    <section id="reserva" class="d-flex flex-column align-items-center mt-5">
+    <section id="pratos" class="section d-flex flex-column align-items-center">
+  </section>
 
+    <section id="reserva" class="section d-flex flex-column align-items-center">
         <h1 class="mt-4">Reservas</h1>
-        <div>
+        <div class="text-center">
             <label for="dia">Escolha o dia:</label>
-            <input type="date" id="dia" name="dia" onchange="aplicar(this.value, document.getElementById('horario').value);updatetodas();" required>
+            <input type="date" id="dia" name="dia" class="" onchange="aplicar(this.value, document.getElementById('horario').value);updatetodas();" required>
     
             <label for="horario">Escolha o horário:</label>
-            <select id="horario" name="horario" onchange="aplicar(document.getElementById('dia').value, this.value);updatetodas();" required>
+            <select id="horario" name="horario" class="" onchange="aplicar(document.getElementById('dia').value, this.value);updatetodas();" required>
                 <option value="almoco">almoço</option>
                 <option value="jantar">jantar</option>
             </select>
+
         <button onclick="toggleverreservas()">todas as reservas</button>
+        <button onclick="togglepratosdia()">pratos do dia</button>
+        <h3>Clique na/s mesa/s que deseja reservar</h3>
         <div id="todas_reservas">
         </div>
-    </div>
+        <div id="todos_pratos_dia">
+        </div>
 
-    <!-- Button trigger modal -->
-<button type="button" class="mt-auto mb-5" data-toggle="modal" data-target="#exampleModalCenter">fazer reserva</button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    </div>
+    
+                    <!-- Button trigger modal -->
+<button type="button" onclick="cancelmodal()" class="btn btn-success mt-auto mb-5 border-5" data-toggle="modal" data-target="#exampleModalCenter">confirmar reserva</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Insira os dados para a reserva</h5>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="r_nome" class="form-control mb-1" placeholder="nome" required>
+        <input type="number" id="r_telemovel" class="form-control" placeholder="telemovel" min="200000000" max="999999999" required>
+        <div id="warning-message" class="text-danger mt-2" style="display: none;">
+          Todos os campos são obrigatórios e a seleção de mesa!
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+      </div> 
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="restartmodal()">cancelar</button>
+        <button type="button" onclick="validateInputs()" class="btn btn-success">validar</button>
       </div>
     </div>
   </div>
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Reserva confirmada !</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="restartmodal()">OK</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 </section>
-
    <!--<footer class="footer text-center container px-4 px-lg-5">
         <p class="text-muted small mb-0">
             VerdeHut &copy; Copyright
         </p>
     </footer>-->
 
-
-
     <script src="./js/db_reservas.js"></script>
+    <script src="./js/db_pratos_dia.js"></script>
     <script src="./js/three.js" type="module"></script>
+    <script src="./js/modal.js"></script>
     <script>
     $(function () { $("#admincrud").load("admin.html"); });
 
