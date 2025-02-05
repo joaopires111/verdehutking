@@ -41,6 +41,7 @@ let tempmesas = [];
 export let mesaselecionada = [];
 window.mesaselecionada = mesaselecionada;
 let modalon = true;
+let fimdepagina = false;
 let currentSection = 0;
 for (let i = 0; i <= 14; i++) {
     mesaselecionada[i] = false;
@@ -48,12 +49,11 @@ for (let i = 0; i <= 14; i++) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('.section');
-    const btnUp = document.getElementById('btnUp');
-    const btnDown = document.getElementById('btnDown');
+
     const indicators = document.querySelectorAll('.indicator span');
     const scrollProgress = document.getElementById('scrollProgress');
 
-    let currentSection = 0;
+    currentSection = 0;
     let scrolling = false; // Prevents rapid scroll jumps
 
     function smoothScrollTo(targetPosition, duration = 800) {
@@ -98,19 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollProgress.innerText = 'Scroll Progress: ' + scrollPercent.toFixed(2) + '%';
     }
 
-    btnUp.addEventListener('click', () => {
-        if (currentSection > 0) {
-            currentSection--;
-            updateView();
-        }
-    });
 
-    btnDown.addEventListener('click', () => {
-        if (currentSection < sections.length - 1) {
-            currentSection++;
-            updateView();
-        }
-    });
 
     // Detect scroll wheel movement
     window.addEventListener('wheel', (event) => {
@@ -261,6 +249,7 @@ function ScrollAnimation() {
         start: 0,
         end: 80,
         func: () => {
+            fimdepagina = false;
             estado = false;
             scene.rotation.y = Math.PI * 2 * scalePercent(0, 80);
 
@@ -294,6 +283,7 @@ function ScrollAnimation() {
             if (scene.rotation.y < 2 * Math.PI) {
                 scene.rotation.y += 0.01;
             } else {
+                fimdepagina = true;
                 hovertableanimation();
             }
         },
@@ -323,7 +313,7 @@ window.addEventListener('mousemove', function (e) {
 });
 
 window.addEventListener('click', function (e) {
-    if(modalon){
+    if(modalon && fimdepagina){
     cubochair.forEach((c, i) => {
         if (raycaster.ray.intersectsBox(c) && !tempmesas[i]) {
             if (!mesaselecionada[i]) {

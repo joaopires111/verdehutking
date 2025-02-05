@@ -1,29 +1,13 @@
 
-    let vertodason = false;
-
-
-function toggleverreservas() {
-    if (!vertodason) {
-        vertodas();
-        vertodason = true;
-    }
-    else if (vertodason) {
-        vernenhuma();
-        vertodason = false;
-    }
-}
 function vertodas() {
-    const dia = document.getElementById('dia').value;
-    const horario = document.getElementById('horario').value;
 
-    console.log(dia);
-    console.log(horario);
     fetch('../php/reservas/read.php')
         .then(response => response.json())
         .then(items => {
             const list = document.getElementById('todas_reservas');
             list.innerHTML = `
-            <div class="rounded-3 border overflow-hidden mt-2">
+
+            <div class="rounded-3 border overflow-hidden">
             <table class="table table-hover table-bordered text-center align-middle mb-0">
             <thead>
             <th>id</th>
@@ -34,18 +18,15 @@ function vertodas() {
             <th>horario</th>
             <th>apagar</th>
             </thead>
-            <tbody id="table-body2"></tbody>
+            <tbody id="table-body3"></tbody>
             </table>
-            </div>     
+            </div>
         `;
 
             // Get the tbody element for appending rows
-            const tableBody = document.getElementById('table-body2');
+            const tableBody = document.getElementById('table-body3');
 
             items.forEach(item => {
-
-                if (item.dia == dia && item.horario == horario) {
-
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                     <td>${item.id}</td>
@@ -61,20 +42,11 @@ function vertodas() {
 
                     tableBody.appendChild(tr);
 
-                }
             });
         })
         .catch(error => console.error('Error fetching items:', error));
 }
-function vernenhuma() {
-    const list = document.getElementById('todas_reservas');
-    list.innerHTML = ``;
-}
-function updatetodas(){
-    if(vertodason){
-        vertodas();
-    }
-}
+
 
 function deleteReserv(id) {
     fetch('../php/reservas/delete.php', {
@@ -89,4 +61,5 @@ function deleteReserv(id) {
         });
 }
 
+document.addEventListener('DOMContentLoaded', vertodas);
 

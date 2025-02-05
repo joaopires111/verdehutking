@@ -7,7 +7,7 @@
     <title>VerdeHut</title>
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
 
-    <link href="/css/styles.css" rel="stylesheet">
+    <link href="./css/styles.css" rel="stylesheet">
     <link href="./css/bootstrap.min.css" rel="stylesheet">
     <script src="./js/three/jquery-3.5.1.min.js"></script>
     <script src="./js/three/popper.min.js"></script>
@@ -26,13 +26,8 @@
 
 <body>
      <!-- Navigation Buttons -->
-  <button class="btn btn-dark position-fixed top-0 start-0 m-3 rounded-circle" id="btnUp">
-    ↑<i class="bi bi-arrow-up"></i>
-  </button>
-  <button class="btn btn-dark position-fixed bottom-0 start-0 m-3 rounded-circle" id="btnDown">
-    ↓<i class="bi bi-arrow-down"></i>
-  </button>
-  <span id="scrollProgress"></span>
+
+  <span id="scrollProgress"></span> 
 
   <!-- Side Indicator -->
   <div class="indicator">
@@ -42,52 +37,71 @@
     <span></span>
   </div>
 
-    <section id="inicio" class="section d-flex flex-column align-items-center">
+    <section id="inicio" class="section flex-column align-items-center">
         <img src="assets\img\so texto verde hut.png" class="mt-5" alt="verdehutlogo" width="30%" height="30%">
     </section>
 
     <section id="contactos" class="section d-flex justify-content-center align-items-center">
-      <div class="text-center">
-        <h6 class="mb-3">
-            Contacto : +351 920 505 245
-        </h6>
-        <h6 class="mb-5">
-            Morada : <a href="https://maps.app.goo.gl/dawatWCsQQGLxQUWA"> R. de Santa Catarina 632, 4000-450
-                Porto </a>
-        </h6>
-        <a class="btn btn-success btn-xl mt-5" href="#page-top">voltar a inicio</a>
+      
+        <div class="card left-card" style="background-color: rgba(255, 255, 255, 0.5);">
+            <div class="card-body">
+              <h3 class="mb-3">
+                Quem somos
+            </h3>
+            <h6>
+              Somos um restaurante vegano no coração do Porto.
+              Nos oferecemos refeições self-service, sobremesas e sumos naturais.
+            </h6>
+            <img src="assets\img\entrada.jpeg" class="mt-5" alt="balcão_1" width="100%" height="100%">
+            </div>
+        </div>
+
+    <div class="container">
+      <div class="card right-card text-center ms-auto">
+          <div class="card-body">
+
+          </div>
       </div>
+  </div>
+
     </section>
-        <!--admin pratos CRUD LIST
-    <section><div id="admincrud"></div></section>-->
+
+  <!--     <section id="admincrud1" class="section text-black-50 d-flex flex-column align-items-center m-0">
+      </section>
+      <section id="admincrud2" class="section text-black-50 d-flex flex-column align-items-center m-0">
+      </section> -->
+
 
     <section id="pratos" class="section d-flex flex-column align-items-center">
+      <h1 class="mt-4">Pratos do dia</h1>
+      <div class="container">
+        <div class="row" id="pratos_dia"></div>
+    </div>
+
+      
   </section>
 
     <section id="reserva" class="section d-flex flex-column align-items-center">
         <h1 class="mt-4">Reservas</h1>
         <div class="text-center">
             <label for="dia">Escolha o dia:</label>
-            <input type="date" id="dia" name="dia" class="" onchange="aplicar(this.value, document.getElementById('horario').value);updatetodas();" required>
+            <input type="date" id="dia" name="dia" class="" onchange="aplicar(this.value, document.getElementById('horario').value);updatetodas(); vertodoscard();" required>
     
             <label for="horario">Escolha o horário:</label>
-            <select id="horario" name="horario" class="" onchange="aplicar(document.getElementById('dia').value, this.value);updatetodas();" required>
+            <select id="horario" name="horario" class="" onchange="aplicar(document.getElementById('dia').value, this.value);updatetodas();vertodoscard();" required>
                 <option value="almoco">almoço</option>
                 <option value="jantar">jantar</option>
             </select>
 
-        <button onclick="toggleverreservas()">todas as reservas</button>
-        <button onclick="togglepratosdia()">pratos do dia</button>
+        <!-- <button onclick="toggleverreserva s()">todas as reservas</button> -->
+        <!-- <button onclick="togglepratosdia()">pratos do dia</button> -->
+                             <!-- Button trigger modal -->
+<button type="button" onclick="cancelmodal()" class="btn btn-success border-5" data-toggle="modal" data-target="#exampleModalCenter">Reservar</button>
         <h3>Clique na/s mesa/s que deseja reservar</h3>
-        <div id="todas_reservas">
-        </div>
-        <div id="todos_pratos_dia">
-        </div>
 
     </div>
     
-                    <!-- Button trigger modal -->
-<button type="button" onclick="cancelmodal()" class="btn btn-success mt-auto mb-5 border-5" data-toggle="modal" data-target="#exampleModalCenter">confirmar reserva</button>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -132,15 +146,39 @@
         </p>
     </footer>-->
 
-    <script src="./js/db_reservas.js"></script>
     <script src="./js/db_pratos_dia.js"></script>
     <script src="./js/three.js" type="module"></script>
     <script src="./js/modal.js"></script>
     <script>
-    $(function () { $("#admincrud").load("admin.html"); });
-
     $('#exampleModal').on('shown.bs.modal', function () {$('#myInput').trigger('focus')})
+    </script>
+    <script>
+    // Automatically set the 'dia' field to today's date
+    function setDefaultDate() {
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth() + 1; // Month is 0-indexed
+        const year = today.getFullYear();
+        const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+
+        document.getElementById('dia').value = formattedDate;  // Set value to today's date
+        
+        aplicar(formattedDate, document.getElementById('horario').value); // Apply changes if needed
+    }
+    window.onload = function() {
+        setDefaultDate(); // Set today's date for dia
+        vertodoscard();
+            };
+
     </script>
 </body>
 
+<!--             <h3>Contactos</h3>
+            <h6 class="mb-3">
+              Contacto : +351 920 505 245
+          </h6>
+          <h6 class="mb-5">
+              Morada : <a href="https://maps.app.goo.gl/dawatWCsQQGLxQUWA"> R. de Santa Catarina 632, 4000-450
+                  Porto </a>
+          </h6> -->
 </html>

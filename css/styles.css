@@ -46,6 +46,8 @@ body, html {
   height: 100%;
 }
 
+
+
     /* Fixed Buttons */
     .nav-button {
       position: fixed;
@@ -100,4 +102,27 @@ body, html {
       opacity: 1;
       transform: scale(1.2);
     }
+
+    .left-card {
+      background-color: rgba(0, 123, 255, 0.5);
+      width: 600px;  /* 50% of the screen width */
+      position: absolute;
+      left: 10%;  /* Stick to the left */
+      top: 50%;  /* Center vertically */
+  }
+
+  
+  .left-card-food {
+    width: 50vw;  /* 50% of the screen width */
+    position: absolute;
+    left: 10%;  /* Stick to the left */
+    top: 90%;  /* Center vertically */
+}
+  .right-card {
+    width: 30vw;  /* 50% of the viewport width */
+    position: absolute;
+    right: 15%;  /* Align to the right */
+    top: 50%;  /* Center vertically */
+    transform: translateY(-50%);  /* Adjust for perfect centering */
+}
 
