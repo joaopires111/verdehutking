@@ -101,10 +101,10 @@
       <h3 class="my-2">Pratos do dia</h3>
       <label for="dia" class="fs-5">Escolha o dia:</label>
       <input type="date" id="dia3" name="dia" class="fs-6 mx-2"
-        onchange="correctpratohoje(this.value, document.getElementById('horario3').value)" required>
+        onchange="correctpratohoje(this.value, document.getElementById('horario3').value)">
       <label for="horario" class="fs-5 mx-2 mb-4">Escolha o horário:</label>
       <select id="horario3" name="horario" class="fs-6"
-        onchange="correctpratohoje(document.getElementById('dia3').value, this.value)" required>
+        onchange="correctpratohoje(document.getElementById('dia3').value, this.value)">
         <option value="almoco">almoço</option>
         <option value="jantar">jantar</option>
       </select>

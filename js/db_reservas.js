@@ -60,13 +60,22 @@ function vertodas() {
             const tableBody = document.getElementById('table-body3');
 
             items.forEach(item => {
+
+                const date = new Date(item.dia); // Convert string to Date
+                const day = date.getDate().toString().padStart(2, '0'); 
+                const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+                const year = date.getFullYear();
+                
+                const formattedDate = `${day}-${month}-${year}`;
+                console.log(formattedDate);
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${item.id}</td>
                     <td>${item.nome}</td>
                     <td>${item.telemovel}</td>
                     <td>${item.mesa}</td>
-                    <td>${item.dia}</td>
+                    <td>${formattedDate}</td>
                     <td>${item.horario}</td>
                     <td>
                     <a class="btn btn-danger btn-block" onclick="openDeleteModal(${item.id})">apagar</a>

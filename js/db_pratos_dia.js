@@ -66,7 +66,13 @@ function fetchItems1() {
             // Loop through items and add rows
             items.forEach(item => {
 
-                console.log(item.quente_image); // Debugging
+                const date = new Date(item.dia); // Convert string to Date
+                const day = date.getDate().toString().padStart(2, '0'); 
+                const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+                const year = date.getFullYear();
+                
+                const formattedDate = `${day}-${month}-${year}`;
+                console.log(formattedDate);
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -78,7 +84,7 @@ function fetchItems1() {
                     <td><img src="${item.salada_image}" width="100" height="100"></td>
                     <td>${item.entrada_nome}</td>
                     <td><img src="${item.entrada_image}" width="100" height="100"></td>
-                    <td>${item.dia}</td>
+                    <td>${formattedDate}</td>
                     <td>${item.horario}</td>                    
                     <td>
                     <a class="btn btn-danger" onclick="openDeleteModal(${item.id})">apagar</a>
