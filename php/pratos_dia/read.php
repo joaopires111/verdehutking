@@ -15,7 +15,11 @@ $stmt = $pdo->query("SELECT
         quente.tipo AS quente_tipo, 
         salada.tipo AS salada_tipo, 
         entrada.tipo AS entrada_tipo,
-                
+
+        quente.ingredientes AS quente_ingredientes, 
+        salada.ingredientes AS salada_ingredientes, 
+        entrada.ingredientes AS entrada_ingredientes,
+
         dia.horario, 
         dia.dia
 

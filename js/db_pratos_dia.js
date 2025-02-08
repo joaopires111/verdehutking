@@ -29,12 +29,13 @@ function modalload() {
     // Expose function globally so you can call it in the HTML
     window.openDeleteModal = openDeleteModal;
 }
-
+let itemstotal;
 //tabela admin crud
 function fetchItems1() {
     fetch('../php/pratos_dia/read.php')
         .then(response => response.json())
         .then(items => {
+            itemstotal = items;
             const list = document.getElementById('items-list2');
 
             // Build the table structure
@@ -90,33 +91,33 @@ function fetchItems1() {
 
 
 //tabela crud criar prato dia
-function fetchItems2(){
+function fetchItems2() {
     fetch('../php/pratos/read.php')
-    .then(response => response.json())
-    .then(items2 => {
-        const quente_select = document.getElementById('quente2');
-        const salada_select = document.getElementById('salada2');
-        const entrada_select = document.getElementById('entrada2');
-        items2.forEach(item2 => {
-            let option = document.createElement('option');
-        if (item2.tipo == "quente") {
-            option.value = item2.id;
-            option.innerHTML = `${item2.nome}`;
-            quente_select.appendChild(option);
-        }
-        if (item2.tipo == "salada") {   
-            option.value = item2.id;
-            option.innerHTML = `${item2.nome}`;
-            salada_select.appendChild(option);
-        }
-        if (item2.tipo == "entrada") {
-            option.value = item2.id;
-            option.innerHTML = `${item2.nome}`;
-            entrada_select.appendChild(option);
-        }
-        });
-    })
-    .catch(error => console.error('Error fetching items2:', error));
+        .then(response => response.json())
+        .then(items2 => {
+            const quente_select = document.getElementById('quente2');
+            const salada_select = document.getElementById('salada2');
+            const entrada_select = document.getElementById('entrada2');
+            items2.forEach(item2 => {
+                let option = document.createElement('option');
+                if (item2.tipo == "quente") {
+                    option.value = item2.id;
+                    option.innerHTML = `${item2.nome}`;
+                    quente_select.appendChild(option);
+                }
+                if (item2.tipo == "salada") {
+                    option.value = item2.id;
+                    option.innerHTML = `${item2.nome}`;
+                    salada_select.appendChild(option);
+                }
+                if (item2.tipo == "entrada") {
+                    option.value = item2.id;
+                    option.innerHTML = `${item2.nome}`;
+                    entrada_select.appendChild(option);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching items2:', error));
 }
 
 
@@ -127,17 +128,34 @@ function createItem2() {
     const dia = document.getElementById('dia2').value;
     const horario = document.getElementById('horario2').value;
 
-    fetch('../php/pratos_dia/create.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quente, salada, entrada, dia, horario })
-    })
+    let cancel = false;
+    //verificar pratos repetidos
+    fetch('../php/pratos_dia/read.php')
         .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            fetchItems1();
+        .then(items => {
+            items.forEach(item => {
+                if (item.dia == dia && item.horario == horario) {
+                    alert('Dia e Horario já preenchidos !!');
+                    cancel = true;
+                }
+            });
+            if(!cancel){
+                fetch('../php/pratos_dia/create.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quente, salada, entrada, dia, horario })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                        fetchItems1();
+                    })
+                    .catch(error => console.error('Error creating ?:', error));
+            }
         })
-        .catch(error => console.error('Error creating ?:', error));
+        .catch(error => console.error('Error:', error));
+
+
 }
 
 function deleteItem2(id) {
@@ -155,52 +173,74 @@ function deleteItem2(id) {
 
 
 //pagina inicial
-function vertodoscard() {
-    const dia = document.getElementById('dia').value;
-    const horario = document.getElementById('horario').value;
-
-
+function vertodoscard(dia, horario) {
     fetch('../php/pratos_dia/read.php')
         .then(response => response.json())
         .then(items => {
             const pratosDiaDiv = document.getElementById('pratos_dia');
             pratosDiaDiv.innerHTML = ''; // Clear previous cards if any
-
             items.forEach(item => {
-                console.log(item.quente_nome);
-
                 if (item.dia == dia && item.horario == horario) {
                     // Create 3 separate cards for each attribute (quente, salada, entrada)
 
                     // Card for quente_nome
                     const quenteCard = document.createElement('div');
-                    quenteCard.classList.add('card', 'mb-3', 'col-md-4', 'p-2');
+                    quenteCard.classList.add('col-md-4', 'm-0', 'p-0');
                     quenteCard.innerHTML = `
-                        <div class="card-body text-center m-2">
-                            <h5 class="card-title">${item.quente_nome}</h5>
-                            <img src="${item.quente_image}" class="mt-3" alt="Quente Image" width="80%" height="80%">
+                        <div class="text-center m-0 p-0">
+                            <h5 class="text-success mb-2">${item.quente_nome}</h5>
+                            <img src="${item.quente_image}" class="img-fluid square-img clickable-image" alt="Quente Image" width="80%" height="80%">
                         </div>
                     `;
 
                     // Card for salada_nome
                     const saladaCard = document.createElement('div');
-                    saladaCard.classList.add('card', 'mb-3', 'col-md-4', 'p-2');
+                    saladaCard.classList.add('col-md-4', 'm-0', 'p-0');
                     saladaCard.innerHTML = `
-                        <div class="card-body text-center">
-                            <h5 class="card-title">${item.salada_nome}</h5>
-                            <img src="${item.salada_image}" class="mt-3" alt="Salada Image" width="80%" height="80%">
+                        <div class="text-center m-0 p-0">
+                            <h5 class="text-success mb-2">${item.salada_nome}</h5>
+                            <img src="${item.salada_image}" class="img-fluid square-img clickable-image" alt="Salada Image" width="80%" height="80%">
                         </div>
                     `;
 
                     // Card for entrada_nome
                     const entradaCard = document.createElement('div');
-                    entradaCard.classList.add('card', 'mb-3', 'col-md-4', 'p-2');
+                    entradaCard.classList.add('col-md-4', 'm-0', 'p-0');
                     entradaCard.innerHTML = `
-                        <div class="card-body text-center">
-                            <h5 class="card-title">${item.entrada_nome}</h5>
-                            <img src="${item.entrada_image}" class="mt-3" alt="Entrada Image" width="80%" height="80%">
+                        <div class="text-center m-0 p-0">
+                            <h5 class="text-success mb-2">${item.entrada_nome}</h5>
+                            <img src="${item.entrada_image}" class="img-fluid square-img clickable-image" alt="Entrada Image" width="80%" height="80%">
                         </div>
                     `;
+
+                    // Add click event listener to open modal
+                    let imageElement = quenteCard.querySelector('.clickable-image');
+                    imageElement.addEventListener('click', function () {
+                        document.getElementById('modalImage').src = this.src;
+                        document.getElementById('imageModalLabel').innerText = item.quente_nome; // Set modal title
+                        document.getElementById('igredientes_h6').innerText = item.quente_ingredientes;
+                        var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                        myModal.show();
+                    });
+                    // Add click event listener to open modal
+                    imageElement = saladaCard.querySelector('.clickable-image');
+                    imageElement.addEventListener('click', function () {
+                        document.getElementById('modalImage').src = this.src;
+                        document.getElementById('imageModalLabel').innerText = item.salada_nome; // Set modal title
+                        document.getElementById('igredientes_h6').innerText = item.salada_ingredientes;
+                        var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                        myModal.show();
+                    });
+                    // Add click event listener to open modal
+                    imageElement = entradaCard.querySelector('.clickable-image');
+                    imageElement.addEventListener('click', function () {
+                        document.getElementById('modalImage').src = this.src;
+                        document.getElementById('imageModalLabel').innerText = item.entrada_nome; // Set modal title
+                        document.getElementById('igredientes_h6').innerText = item.entrada_ingredientes;
+                        var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                        myModal.show();
+                    });
+
 
                     // Append the 3 cards to the pratos_dia div
                     pratosDiaDiv.appendChild(quenteCard);
@@ -210,4 +250,58 @@ function vertodoscard() {
             });
         })
         .catch(error => console.error('Error fetching items:', error));
+}
+
+function filtrardiahorario(dia, horario){
+    const list = document.getElementById('items-list2');
+
+    // Build the table structure
+    list.innerHTML = `
+    <div class="rounded-3 border overflow-hidden">
+    <table class="table table-hover table-bordered text-center align-middle mb-0">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>nome quente</th>
+                <th>imagem</th>
+                <th>nome salada</th>
+                <th>imagem</th>
+                <th>nome entrada</th>
+                <th>imagem</th>
+                <th>dia</th>
+                <th>horario</th>
+                <th>apagar</th>
+            </tr>
+        </thead>
+        <tbody id="table-body2"></tbody>
+    </table>
+    </div>`;
+
+    // Get the tbody element for appending rows
+    const tableBody = document.getElementById('table-body2');
+
+    // Loop through items and add rows
+    itemstotal.forEach(item => {
+
+        if(item.dia == dia && item.horario == horario){
+        console.log(item.quente_image); // Debugging
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+
+            <td>${item.id}</td>
+            <td>${item.quente_nome}</td>
+            <td><img src="${item.quente_image}" width="100" height="100"></td>
+            <td>${item.salada_nome}</td>
+            <td><img src="${item.salada_image}" width="100" height="100"></td>
+            <td>${item.entrada_nome}</td>
+            <td><img src="${item.entrada_image}" width="100" height="100"></td>
+            <td>${item.dia}</td>
+            <td>${item.horario}</td>                    
+            <td>
+            <a class="btn btn-danger" onclick="openDeleteModal(${item.id})">apagar</a>
+            </td>`;
+        tableBody.appendChild(tr);
+    }
+});
 }

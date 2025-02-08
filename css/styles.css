@@ -1,4 +1,14 @@
-
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../assets/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Lobster';
+  src: url('../assets/fonts/Lobster-Regular.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
 
 section {
   min-height: 100vh;
@@ -6,31 +16,15 @@ section {
   display: flex;
 }
 
-    /* Fixed Buttons */
-    .nav-button {
-      position: fixed;
-      left: 10px;
-      width: 50px;
-      height: 50px;
-      border: none;
-      border-radius: 50%;
-      background: #34495e;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
 /*CANVAS DO THREE.js*/
 canvas {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -2;/* Keeps this content in the back*/
+  z-index: -2;
+  /* Keeps this content in the back*/
 }
+
 
 #scrollProgress {
   position: fixed;
@@ -40,89 +34,101 @@ canvas {
   font-size: 4vh;
 }
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
-
-
-    /* Fixed Buttons */
-    .nav-button {
-      position: fixed;
-      left: 10px;
-      width: 50px;
-      height: 50px;
-      border: none;
-      border-radius: 50%;
-      background: #34495e;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .nav-button:active {
-      transform: scale(0.95);
-    }
-
-    .nav-button.up {
-      top: 20px;
-    }
-
-    .nav-button.down {
-      bottom: 20px;
-    }
-
-    /* Side Indicator */
-    .indicator {
-      position: fixed;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .indicator span {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: white;
-      opacity: 0.5;
-      transition: opacity 0.3s, transform 0.3s;
-    }
-
-    .indicator span.active {
-      opacity: 1;
-      transform: scale(1.2);
-    }
-
-    .left-card {
-      background-color: rgba(0, 123, 255, 0.5);
-      width: 600px;  /* 50% of the screen width */
-      position: absolute;
-      left: 10%;  /* Stick to the left */
-      top: 50%;  /* Center vertically */
-  }
-
-  
-  .left-card-food {
-    width: 50vw;  /* 50% of the screen width */
-    position: absolute;
-    left: 10%;  /* Stick to the left */
-    top: 90%;  /* Center vertically */
-}
-  .right-card {
-    width: 30vw;  /* 50% of the viewport width */
-    position: absolute;
-    right: 15%;  /* Align to the right */
-    top: 50%;  /* Center vertically */
-    transform: translateY(-50%);  /* Adjust for perfect centering */
+h1, h2, h3, h4, h5, h6, p, a, label{
+  font-family: 'monserrat', sans-serif;
+  font-weight: 200;
 }
 
+.font-lobster{
+  font-family: 'lobster', sans-serif;
+  font-weight: 200;
+}
+/* Side Indicator */
+.indicator {
+  position: fixed;
+  right: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.indicator img {
+  width: 35px;
+  height: 35px;
+  opacity: 0.5;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.indicator img.active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.square-img {
+  width: 160px;
+  /* Set width */
+  height: 160px;
+  /* Set height */
+  object-fit: cover;
+  /* Ensures image fills the square without distortion */
+  border-radius: 10px;
+  /* Optional: rounded corners */
+}
+
+.square-img2 {
+  width: 50vw;
+  /* Set width */
+  height: 50vh;
+  /* Set height */
+  object-fit: cover;
+  /* Ensures image fills the square without distortion */
+  border-radius: 10px;
+  /* Optional: rounded corners */
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-text {
+  position: absolute;
+  right: 130%; /* Show on the right */
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 14px;
+  display: none; /* Hide by default */
+}
+
+.image-container:hover .tooltip-text {
+  display: block; /* Show on hover */
+}
+
+.sidediv{
+  position: fixed;
+  left: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

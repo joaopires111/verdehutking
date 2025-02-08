@@ -1,7 +1,7 @@
 //IMPORTS
 import * as THREE from 'three';
 import { GLTFLoader } from 'gtlf';
-const restauranteUrl = new URL('../assets/models/restaurante.gltf', import.meta.url);
+const restauranteUrl = new URL('../assets/models/restaurante2.gltf', import.meta.url);
 const mesaUrl = new URL('../assets/models/mesa_cadeiras.gltf', import.meta.url);
 //DEBUG
 //import { OrbitControls } from 'orbit';
@@ -40,109 +40,13 @@ let originmat;
 let tempmesas = [];
 export let mesaselecionada = [];
 window.mesaselecionada = mesaselecionada;
-let modalon = true;
+let modalon = false;
 let fimdepagina = false;
-let currentSection = 0;
+const axis = new THREE.Vector3(1,0,0);
+let currentaxis;
 for (let i = 0; i <= 14; i++) {
     mesaselecionada[i] = false;
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('.section');
-
-    const indicators = document.querySelectorAll('.indicator span');
-    const scrollProgress = document.getElementById('scrollProgress');
-
-    currentSection = 0;
-    let scrolling = false; // Prevents rapid scroll jumps
-
-    function smoothScrollTo(targetPosition, duration = 800) {
-        const startPosition = window.scrollY;
-        const distance = targetPosition - startPosition;
-        const startTime = performance.now();
-
-        function animationStep(currentTime) {
-            const elapsedTime = currentTime - startTime;
-            const progress = Math.min(elapsedTime / duration, 1);
-            
-            window.scrollTo(0, startPosition + distance * easeInOutQuad(progress));
-
-            if (progress < 1) {
-                requestAnimationFrame(animationStep);
-            } else {
-                scrolling = false; // Allow next scroll event
-            }
-        }
-
-        function easeInOutQuad(t) {
-            return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-        }
-
-        requestAnimationFrame(animationStep);
-    }
-
-    function updateView() {
-        if (scrolling) return; // Prevents spam scrolling
-
-        scrolling = true;
-        const targetPosition = sections[currentSection].getBoundingClientRect().top + window.scrollY;
-        smoothScrollTo(targetPosition, 800);
-
-        // Update indicator
-        indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === currentSection);
-        });
-
-        // Update scroll percentage
-        let scrollPercent = ((currentSection) / (sections.length - 1)) * 100;
-        scrollProgress.innerText = 'Scroll Progress: ' + scrollPercent.toFixed(2) + '%';
-    }
-
-
-
-    // Detect scroll wheel movement
-    window.addEventListener('wheel', (event) => {
-        if (scrolling) return; // Prevent spam scrolling
-
-        if (event.deltaY > 0 && currentSection < sections.length - 1) {
-            // Scrolling down
-            currentSection++;
-        } else if (event.deltaY < 0 && currentSection > 0) {
-            // Scrolling up
-            currentSection--;
-        }
-        updateView();
-    });
-
-    // Detect touch scrolling (for mobile)
-    let touchStartY = 0;
-    window.addEventListener('touchstart', (event) => {
-        touchStartY = event.touches[0].clientY;
-    });
-
-    window.addEventListener('touchend', (event) => {
-        if (scrolling) return;
-
-        let touchEndY = event.changedTouches[0].clientY;
-        let deltaY = touchStartY - touchEndY;
-
-        if (deltaY > 50 && currentSection < sections.length - 1) {
-            // Swipe up (scroll down)
-            currentSection++;
-        } else if (deltaY < -50 && currentSection > 0) {
-            // Swipe down (scroll up)
-            currentSection--;
-        }
-        updateView();
-    });
-
-    // Disable manual scrolling
-    document.body.style.overflow = 'hidden';
-
-    // Initialize view
-    updateView();
-});
-
 
 
 //CODE
@@ -152,14 +56,15 @@ function StartRenderer() {
 
     //renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: Use a softer shadow type
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xF2E8DF);
+    //renderer.setClearColor(0xF2E8DF);
     document.body.appendChild(renderer.domElement);
 }
 StartRenderer();
 
 function CameraAndScene() {
     camera.position.set(0, 2, 2);
-    camera.lookAt(scene.position);
+    //camera.lookAt(scene.position);
+    camera.setRotationFromAxisAngle(axis, -0.25*Math.PI);
 }
 CameraAndScene();
 
@@ -172,21 +77,23 @@ function lightsAndEffects() {
     directionlight1.castShadow = true;
 
     scene.fog = new THREE.FogExp2(0xffffff, 0.03);
+    const loader = new THREE.TextureLoader();
+    loader.load('assets/img/rosa.jpg', function(texture) {
+    scene.background = texture;
+});
 }
 lightsAndEffects();
 
 function GLTFloader() {
 
-    for (let i = 0; i <= nrmesas - 1; i++) {
-        assetLoader.load(mesaUrl.href, function (gltf) {
 
+        assetLoader.load(mesaUrl.href, function (gltf) {
+            for (let i = 0; i <= nrmesas - 1; i++) {
             mesa[i] = gltf.scene.clone();
             scene.add(mesa[i]);
             mixer[i] = new THREE.AnimationMixer(mesa[i]);
             gltf.animations.forEach((clip, c) => {
                 action[i * 2 + c] = mixer[i].clipAction(clip);
-                //action[i*2 + c].setLoop(THREE.LoopOnce, 1); // Play once
-                //action[i*2 + c].clampWhenFinished = true;   // Clamp to the last frame when finished
                 action[i * 2 + c].time = starttime;           // Start at the beginning
                 action[i * 2 + c].setEffectiveTimeScale(5);  // Normal playback speed
                 action[i * 2 + c].play();
@@ -199,7 +106,6 @@ function GLTFloader() {
                 }
             });
 
-            mesa[i].castShadow = true;
             if (i <= 4) {
                 mesa[i].position.set(i * 2 / 3 - 1.5, 0, -0.5);
             } else if (i <= 9) {
@@ -211,9 +117,10 @@ function GLTFloader() {
 
             cubochair[i] = new THREE.Box3().setFromObject(mesa[i]);
 
-            //DEBUG
+        //DEBUG
             //const boxHelper = new THREE.Box3Helper(cubochair[i], 0x00ff00); // TESTMODE
             //scene.add(boxHelper);
+        }
         },
 
             function (xhr) {
@@ -222,7 +129,7 @@ function GLTFloader() {
             undefined, function (error) {
                 console.error(error);
             });
-    }
+
 
     assetLoader.load(restauranteUrl.href, function (gltf) {
         gltf.scene.traverse(function (child) {
@@ -244,45 +151,44 @@ function scalePercent(start, end) {
 }
 
 function ScrollAnimation() {
-
     animationScripts.push({
         start: 0,
-        end: 80,
+        end: 33,
         func: () => {
             fimdepagina = false;
             estado = false;
-            scene.rotation.y = Math.PI * 2 * scalePercent(0, 80);
+            scene.rotation.y = Math.PI *0.5* scalePercent(0, 33);
+            camera.position.x = -scalePercent(0, 33);
 
-            //camera posicao 1 (0, 2, 2)
-            //camera posicao 2 (0, 3, 0)
-
-            if (camera.position.y > 2) {
-                camera.lookAt(scene.position);
-                camera.position.y -= 0.02;
-            }
-            if (camera.position.z < 2) {
-                camera.position.z += 0.04;
-            }
         },
     });
 
     animationScripts.push({
-        start: 80,
-        end: 101,
+        start: 34,
+        end: 66,
         func: () => {
+            fimdepagina = false;
+            estado = false;
 
-            //ROTACAO DA CAMARA para o topo
-            if (camera.position.y < 3) {
-                camera.lookAt(scene.position);
-                camera.position.y += 0.02;
-            }
-            if (camera.position.z > 0) {
-                camera.position.z -= 0.04;
-            }
+            camera.position.x = (2.1*scalePercent(34, 66)) - 1;
+        },
+    });
+
+    animationScripts.push({
+        start: 67,
+        end: 100,
+        func: () => {
+            camera.position.x = 1.1 - (scalePercent(67, 100));
+
+            scene.rotation.y = (Math.PI * 0.5) - (0.5 * Math.PI * scalePercent(67, 100));
+
+            camera.position.y = 2 + scalePercent(67, 100);
+            camera.position.z = 2 - 2*scalePercent(67, 100);
+            //console.log(camera.position);
+
+            camera.setRotationFromAxisAngle(axis,-0.25*Math.PI -0.25*Math.PI*scalePercent(67, 100));
             //acerto da rotacao da cena
-            if (scene.rotation.y < 2 * Math.PI) {
-                scene.rotation.y += 0.01;
-            } else {
+            if (scene.rotation.y <= 0.01*Math.PI) {
                 fimdepagina = true;
                 hovertableanimation();
             }
@@ -313,7 +219,7 @@ window.addEventListener('mousemove', function (e) {
 });
 
 window.addEventListener('click', function (e) {
-    if(modalon && fimdepagina){
+    if(!modalon && fimdepagina){
     cubochair.forEach((c, i) => {
         if (raycaster.ray.intersectsBox(c) && !tempmesas[i]) {
             if (!mesaselecionada[i]) {
@@ -334,6 +240,12 @@ window.addEventListener('click', function (e) {
             }
         }
     });
+    if(mesaselecionada.some(value => value)){
+        document.getElementById('button_reserva').classList.replace('btn-secondary', 'btn-success');
+    }else{
+        document.getElementById('button_reserva').classList.replace('btn-success', 'btn-secondary');
+    }
+
 }
 });
 
@@ -351,7 +263,6 @@ export function aplicar(dia, horario) {
                     }
                 });
             }
-            console.log(tempmesas);
         })
         .then(() => {
             checkreserva();
@@ -375,10 +286,10 @@ function checkreserva() {
             });
         }
     });
-    console.log("CHECKINGS !!");
 }
 
 export function fazerreserva(nome, telemovel, dia, horario) {
+    console.log(mesaselecionada);
     mesaselecionada.forEach((m , i) => {
         if(m){
             fetch('../php/reservas/create.php', {
@@ -393,6 +304,8 @@ export function fazerreserva(nome, telemovel, dia, horario) {
                 return response.text(); // Read response as plain text
               })
                 .then(() => {
+                    tempmesas[i] = true;
+                    mesaselecionada[i] = false;
                         mesa[i].traverse(function (child) {
                             if (child.isMesh) {
                                 child.material = redmat;
@@ -407,17 +320,15 @@ export function fazerreserva(nome, telemovel, dia, horario) {
 
 export function restartmodal(){
     setTimeout(() => {
-        modalon = true;
-        console.log("MODAL ON");
+        modalon = false;
       }, 100);
 }
 
-export function cancelmodal(){
-        modalon = false;
-        console.log("MODAL OFF");
+export function modalopen(){
+        modalon = true;
 }
 
-window.cancelmodal = cancelmodal;
+window.modalopen = modalopen;
 window.restartmodal = restartmodal;
 window.fazerreserva = fazerreserva;
 window.aplicar = aplicar;
@@ -433,8 +344,8 @@ function playScrollAnimations() {
 document.body.onscroll = () => {
     scrollPercent =
         (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
-    document.getElementById('scrollProgress').innerText =
-        'Scroll Progress : ' + scrollPercent.toFixed(2)
+/*      document.getElementById('scrollProgress').innerText =
+        'Scroll Progress : ' + scrollPercent.toFixed(2); */
 } 
 
 function playanimatehover() {
@@ -455,6 +366,7 @@ function playanimatehover() {
 }
 
 function animate() {
+//width: 1536 Screen Height: 864
     playScrollAnimations();
     if (animatehover > -1 && animatehover != lastanimatehover) {
         playanimatehover();
