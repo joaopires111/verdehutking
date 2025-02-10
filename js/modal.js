@@ -6,18 +6,8 @@ function validateInputs() {
   const horario = document.getElementById('horario').value;
 
   const warningMessage = document.getElementById('warning-message');
-  let mesaselected = false;
 
-  mesaselecionada.forEach(m => {
-    if (m) {
-      mesaselected = true;
-    }
-  });
-
-
-
-  console.log(" nome: " + nome + " telemovel: " + telemovel + " dia: " + dia + " horario: " + horario + " mesa: " + mesaselected);
-  if (!nome || !telemovel || !dia || !horario || !mesaselected || telemovel < 200000000 || telemovel > 999999999) {
+  if (!nome || !telemovel || !dia || !horario || !mesaselecionada || telemovel < 200000000 || telemovel > 999999999) {
     // Show warning message
     warningMessage.style.display = 'block';
   } else {

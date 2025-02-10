@@ -20,6 +20,15 @@ if (!isset($_SESSION['user'])) {
     <script src="./js/three/jquery-3.5.1.min.js"></script>
     <script src="./js/three/popper.min.js"></script>
     <script src="./js/three/bootstrap.min.js"></script>
+    <script type="importmap">
+            {
+              "imports": {
+                "three": "./js/three/three.module.js",
+                "gtlf": "./js/three/GLTFLoader.js",
+                "orbit": "./js/three/OrbitControls.js"
+              }
+            }
+          </script>
 </head>
 
 <body class="d-flex flex-column align-items-center text-center">
@@ -31,20 +40,24 @@ if (!isset($_SESSION['user'])) {
 <img src="assets\img\so texto verde hut.png" class="mt-5 img-fluid" alt="verdehutlogo" width="25%" height="25%">
 <h2 class="text-success mt-1 mb-5">ADMINISTRADOR</h2>
 <div class="sidediv" id="sidebar-container"></div>
-    <h3 class="text-success">RESERVAS</h3>
-    <h4 class="text-end">Lista total reservas</h4>
+
+
     <div class="text-center mb-3">
-      <label for="dia" class="fs-5">dia:</label>
+    <div class="mb-3">
+    <h3 class="text-success">RESERVAS</h3>
+      <label for="dia" class="fs-5">Dia:</label>
       <input type="date" id="dia" name="dia" class="fs-6 mx-2">
-      <label for="horario" class="fs-5 mx-2">horário:</label>
+      <label for="horario" class="fs-5 mx-2">Horário:</label>
       <select id="horario" name="horario" class="fs-6">
         <option value="almoco">almoço</option>
         <option value="jantar">jantar</option>
       </select>
-      <button class="btn btn-warning"  onclick="filtrardiahorario(document.getElementById('dia').value, document.getElementById('horario').value)">filtrar</button>
-      <button class="btn btn-success" onclick="vertodas()">ver todos</button>
+      <button class="btn btn-warning mb-1"  onclick="filtrardiahorario(document.getElementById('dia').value, document.getElementById('horario').value);aplicar(document.getElementById('dia').value, document.getElementById('horario').value)">filtrar</button>
+      <button class="btn btn-success mb-1" onclick="vertodas();reset()">ver todos</button>
+      </div>
+      <div id="todas_reservas" class="d-flex flex-column mb-5"></div>
+
     </div>
-        <div id="todas_reservas" class="w-75 d-flex flex-column mb-5"></div>
 
             <!-- Bootstrap Delete Confirmation Modal -->
             <div id="deleteModal" class="modal fade" tabindex="-1">
@@ -64,7 +77,7 @@ if (!isset($_SESSION['user'])) {
             </div>
         </div>
     </div>
-
+    <script src="./js/three_reservas.js" type="module"></script>
     <script src="./js/db_reservas.js"></script>
     <script>
     $(document).ready(function(){$("#sidebar-container").load("sidebar.php");});

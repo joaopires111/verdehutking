@@ -30,6 +30,7 @@ function modalload() {
     window.openDeleteModal = openDeleteModal;
 }
 let itemstotal;
+
 //tabela admin crud
 function fetchItems1() {
     fetch('../php/pratos_dia/read.php')
@@ -40,20 +41,20 @@ function fetchItems1() {
 
             // Build the table structure
             list.innerHTML = `
-            <div class="rounded-3 border overflow-hidden">
-            <table class="table table-hover table-bordered text-center align-middle mb-0">
-                <thead>
+            <div class="rounded-4 border overflow-hidden">
+            <table class="table table-hover table-bordered  table-striped text-center align-middle">
+                <thead class="table-success">
                     <tr>
-                        <th>id</th>
-                        <th>nome quente</th>
-                        <th>imagem</th>
-                        <th>nome salada</th>
-                        <th>imagem</th>
-                        <th>nome entrada</th>
-                        <th>imagem</th>
-                        <th>dia</th>
-                        <th>horario</th>
-                        <th>apagar</th>
+                <th>ID</th>
+                <th>Nome Quente</th>
+                <th></th>
+                <th>Nome Salada</th>
+                <th></th>
+                <th>Nome Entrada</th>
+                <th></th>
+                <th>Dia</th>
+                <th>Horário</th>
+                <th></th>
                     </tr>
                 </thead>
                 <tbody id="table-body2"></tbody>
@@ -141,11 +142,14 @@ function createItem2() {
         .then(items => {
             items.forEach(item => {
                 if (item.dia == dia && item.horario == horario) {
-                    alert('Dia e Horario já preenchidos !!');
+                    document.getElementById('aviso-dia-horario').hidden = false;
+                    document.getElementById('aviso-prato-criado').hidden = true;
                     cancel = true;
                 }
             });
             if(!cancel){
+                document.getElementById('aviso-dia-horario').hidden = true;
+                document.getElementById('aviso-prato-criado').hidden = false;
                 fetch('../php/pratos_dia/create.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -173,7 +177,7 @@ function deleteItem2(id) {
         .then(response => response.json())
         .then(data => {
             console.log(data.message);
-            fetchItems1();
+                fetchItems1();
         });
 }
 
@@ -259,24 +263,25 @@ function vertodoscard(dia, horario) {
 }
 
 function filtrardiahorario(dia, horario){
+
     const list = document.getElementById('items-list2');
 
     // Build the table structure
     list.innerHTML = `
     <div class="rounded-3 border overflow-hidden">
     <table class="table table-hover table-bordered text-center align-middle mb-0">
-        <thead>
+        <thead class="table-success">
             <tr>
-                <th>id</th>
-                <th>nome quente</th>
-                <th>imagem</th>
-                <th>nome salada</th>
-                <th>imagem</th>
-                <th>nome entrada</th>
-                <th>imagem</th>
-                <th>dia</th>
-                <th>horario</th>
-                <th>apagar</th>
+                <th>ID</th>
+                <th>Nome Quente</th>
+                <th></th>
+                <th>Nome Salada</th>
+                <th></th>
+                <th>Nome Entrada</th>
+                <th></th>
+                <th>Dia</th>
+                <th>Horário</th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="table-body2"></tbody>

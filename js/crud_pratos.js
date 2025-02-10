@@ -1,8 +1,9 @@
 function modalload() {
     let deletedia = null;
 
-    function openDeleteModal(id) {
+    function openDeleteModal(id, nomedelete) {
         deletedia = id;
+        document.getElementById('deletemodaltext').innerHTML =`Tem a certeza que pretende apagar "${nomedelete}" ?`;
         const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
         modal.show();
     }
@@ -31,7 +32,9 @@ function modalload() {
 
 //-----------------------------CRUD----------------------------
 let totalitems;
+let filtrosaved =  null;
 function fetchItems() {
+    filtrosaved = null;
     fetch('../php/pratos/read.php')
         .then(response => response.json())
         .then(items => {
@@ -40,17 +43,17 @@ function fetchItems() {
 
             // Build the table structure
             list.innerHTML = `
-            <div class="rounded-3 border overflow-hidden">
-            <table class="table table-hover table-bordered text-center align-middle mb-0">
-                <thead>
+            <div class="rounded-4 border overflow-hidden">
+            <table class="table table-hover table-bordered table-striped text-center align-middle mb-0">
+                <thead class="table-success">
                     <tr>
-                        <th>id</th>
-                        <th>nome</th>
-                        <th>tipo</th>
-                        <th>ingredientes</th>
-                        <th>imagem</th>
-                        <th>editar</th>
-                        <th>apagar</th>
+                        <th>ID</th>
+                        <th>Nome Prato</th>
+                        <th>Tipo</th>
+                        <th>Ingredientes</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="table-body"></tbody>
@@ -74,7 +77,7 @@ function fetchItems() {
                         <a class="btn btn-success btn-sm" onclick="prepareUpdate(${item.id}, '${item.nome}', '${item.tipo}', '${item.ingredientes}', '${item.image}')" data-toggle="modal" data-target="#uploadmodal">editar</a>
                     </td>
                     <td>
-                        <a class="btn btn-danger btn-sm" onclick="openDeleteModal(${item.id})">apagar</a>
+                        <a class="btn btn-danger btn-sm" onclick="openDeleteModal(${item.id}, '${item.nome}')">apagar</a>
                     </td>`;
                 tableBody.appendChild(tr);
             });
@@ -92,9 +95,11 @@ function createItem() {
 
     if (!fileInput.files[0]) {
         document.getElementById('imgwarning').hidden = false;
+        document.getElementById('pratocriado').hidden = true;
     }
     else {
         document.getElementById('imgwarning').hidden = true;
+        document.getElementById('pratocriado').hidden = false;
 
         let formData = new FormData();
         formData.append("nome", nome);
@@ -125,7 +130,12 @@ function deleteItem(id) {
         .then(response => response.json())
         .then(data => {
             console.log(data.message);
-            fetchItems();
+            if(filtrosaved  == null){
+                fetchItems();
+            }else{
+                fetchItems();
+                filtrartipo(filtrosaved);
+            }
         });
 }
 
@@ -171,20 +181,22 @@ function updateItem() {
 }
 
 function filtrartipo(tipo){
+    filtrosaved = tipo;
     const list = document.getElementById('items-list');
             // Build the table structure
             list.innerHTML = `
-            <div class="rounded-3 border overflow-hidden">
+            <div class="rounded-4 border overflow-hidden">
             <table class="table table-hover table-bordered text-center align-middle mb-0">
-                <thead>
+                <thead class="table-success">
                     <tr>
-                        <th>id</th>
-                        <th>nome</th>
-                        <th>tipo</th>
-                        <th>ingredientes</th>
-                        <th>imagem</th>
-                        <th>editar</th>
-                        <th>apagar</th>
+                        <th>ID</th>
+                        <th>Nome Prato</th>
+                        <th>Tipo</th>
+                        <th>Ingredientes</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
                     </tr>
                 </thead>
                 <tbody id="table-body"></tbody>
@@ -208,7 +220,7 @@ if(item.tipo == tipo){
                         <a class="btn btn-success btn-sm" onclick="prepareUpdate(${item.id}, '${item.nome}', '${item.tipo}', '${item.ingredientes}', '${item.image}')">editar</a>
                     </td>
                     <td>
-                        <a class="btn btn-danger btn-sm" onclick="deleteItem(${item.id})">apagar</a>
+                        <a class="btn btn-danger btn-sm" onclick="openDeleteModal(${item.id})">apagar</a>
                     </td>`;
                 tableBody.appendChild(tr);
             }

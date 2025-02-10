@@ -245,7 +245,6 @@ window.addEventListener('click', function (e) {
     }else{
         document.getElementById('button_reserva').classList.replace('btn-success', 'btn-secondary');
     }
-
 }
 });
 

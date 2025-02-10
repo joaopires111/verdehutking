@@ -27,41 +27,42 @@
 <body class="">
   <!-- Navigation Buttons -->
 
- <!--  <span id="scrollProgress"></span> -->
+  <!--  <span id="scrollProgress"></span> -->
 
   <!-- Side Indicator -->
   <div class="indicator">
     <div class="image-container">
-    <img src="assets\img\home.png" class="tooltip-img active"  data-text="Início"></img>
-    <span class="tooltip-text"></span>
-  </div>
+      <img src="assets\img\home.png" class="tooltip-img active" data-text="Início"></img>
+      <span class="tooltip-text"></span>
+    </div>
     <div class="image-container">
       <img src="assets/img/quem_somos.png" class="tooltip-img" data-text="Quem Somos">
       <span class="tooltip-text"></span>
-  </div>
-  <div class="image-container">
-    <img src="assets\img\menu.png" class="tooltip-img" data-text="Pratos do dia"></img>
-    <span class="tooltip-text"></span>
-  </div>
+    </div>
     <div class="image-container">
-    <img src="assets\img\reservas.png" class="tooltip-img" data-text="Reservas"></img>
-    <span class="tooltip-text"></span>
-  </div>
+      <img src="assets\img\menu.png" class="tooltip-img" data-text="Pratos do dia"></img>
+      <span class="tooltip-text"></span>
+    </div>
     <div class="image-container">
-      <a href="./admin_login.html"  target="_blank">
-    <img src="assets\img\admin.png" class="tooltip-img" data-text="Acesso restrito"></img>
-    <span class="tooltip-text"></span>
-    </a>
-  </div>
+      <img src="assets\img\reservas.png" class="tooltip-img" data-text="Reservas"></img>
+      <span class="tooltip-text"></span>
+    </div>
+    <div class="image-container">
+      <a href="./admin_login.html" target="_blank">
+        <img src="assets\img\admin.png" class="tooltip-img" data-text="Acesso restrito"></img>
+        <span class="tooltip-text"></span>
+      </a>
+    </div>
   </div>
 
   <section id="inicio" class="section flex-column align-items-center pb-5 px-5">
     <img src="assets\img\so texto verde hut.png" class="mt-5 img-fluid" alt="verdehutlogo" width="30%" height="30%">
     <div class="row mt-auto d-flex justify-content-center fs-6">
       <div class="col-md-6">
-        <a href="https://maps.app.goo.gl/QuQKnJdVayyJqYjW6" class="text-success" target="_blank">R. de Santa Catarina
+        <p href="https://maps.app.goo.gl/QuQKnJdVayyJqYjW6" class="text-success" target="_blank">
+          R. de Santa Catarina
           632, 4000-450 Porto,
-          Portugal</a>
+          Portugal</p>
         <p></p>
         <a href="tel:+351920585843" class="text-success">T1: +351 920 585 843</a>
         <a href="tel:+351920505245" class="text-success">T2: +351 920 505 245</a>
@@ -83,8 +84,8 @@
 
   </section>
 
-  <section id="contactos" class="section d-flex align-items-center px-5">
-    <div class="col-md-3 mx-5">
+  <section id="contactos" class="section d-flex align-items-center mx-5 px-5">
+    <div class="col-md-4 mx-5">
       <h3>
         Quem somos
       </h3>
@@ -92,8 +93,33 @@
         Somos um restaurante vegano no coração do Porto.
         Oferecemos refeições self-service, sobremesas e sumos naturais.
       </h6>
-      <img src="assets\img\entrada.jpeg" class="mt-5" alt="balcão_1" width="100%" height="100%">
+      <img src="assets\img\entrada.jpeg" class="mt-1 mb-3" alt="balcão_1" width="100%" height="200px"
+        style="object-fit: cover">
+      <h3>
+        Onde estamos
+      </h3>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d347.1660781531916!2d-8.6052085!3d41.1517908!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2465d1b167bf67%3A0x9c9fb2429b593ddc!2sVERDE%20HUT%20RESTAURANTE%20VEGANO!5e1!3m2!1sen!2spt!4v1739126352736!5m2!1sen!2spt"
+        width="100%" height="200" class="" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
+    <div class="row  align-items-center" style="height: 100vh;">
+      <div class="col-1 d-flex flex-column">
+        <a href="https://www.instagram.com/verde_hut/" target="_blank" class="my-2">
+          <img src="assets\img\instagram_icon.png" class="square-img3" width="50px" height="50px" alt="instagram_icon">
+        </a>
+        <a href="https://www.facebook.com/people/VERDE-HUT/61558192950475/?mibextid=LQQJ4d" target="_blank" class="my-2">
+          <img src="assets\img\facebook_icon.png" class="square-img3" width="50px" height="50px" alt="facebook_icon">
+        </a>
+        <a href="https://glovoapp.com/pt/pt/porto/verde-hut-restaurante-vegano-opo/" target="_blank" class="my-2">
+          <img src="assets\img\glovo_icon.jpeg" class="square-img3" width="50px" height="50px" alt="glovo_icon">
+        </a>
+        <a href="https://www.happycow.net/reviews/verde-hut-porto-407244" target="_blank" class="my-2">
+          <img src="assets\img\happycow_icon.png" class="square-img3" width="50px" height="50px" alt="happycow_icon">
+        </a>
+      </div>
+    </div>
+
   </section>
 
   <section id="pratos" class="section d-flex flex-column align-items-end justify-content-center px-5 text-center">
@@ -134,76 +160,77 @@
 
       <h5 class="mt-3">Clique na/s mesa/s que deseja reservar</h5>
     </div>
-    <button type="button" onclick="modalopen()" id="button_reserva" class="mt-auto mb-5 btn btn-lg btn-secondary" data-toggle="modal"
-      data-target="#exampleModalCenter">Reservar</button>
+    <button type="button" onclick="modalopen()" id="button_reserva" class="mt-auto mb-5 btn btn-lg btn-secondary"
+      data-toggle="modal" data-target="#exampleModalCenter">Reservar</button>
   </section>
 
 
-    <!-- Modal RESERVAS-->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Insira os dados para a reserva</h5>
-          </div>
-          <div class="modal-body">
-            <input type="text" id="r_nome" class="form-control mb-1" placeholder="nome" required>
-            <input type="number" id="r_telemovel" class="form-control" placeholder="telemovel" min="200000000"
-              max="999999999" required>
-            <div id="warning-message" class="text-danger mt-2" style="display: none;">
-              Todos os campos são obrigatórios e a seleção de mesa!
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="restartmodal()">cancelar</button>
-            <button type="button" onclick="validateInputs()" class="btn btn-success">validar</button>
+  <!-- Modal RESERVAS-->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Insira os dados para a reserva</h5>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="r_nome" class="form-control mb-1" placeholder="nome" required>
+          <input type="number" id="r_telemovel" class="form-control" placeholder="telemovel" min="200000000"
+            max="999999999" required>
+          <div id="warning-message" class="text-danger mt-2" style="display: none;">
+            Todos os campos são obrigatórios e a seleção de mesa!
           </div>
         </div>
-      </div>
-    </div>
-    <!-- Modal RESERVAS 2-->
-    <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Reserva confirmada !</h5>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="aplicar(document.getElementById('dia').value = dia,document.getElementById('horario').value = hora);restartmodal()">OK</button>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="restartmodal()">cancelar</button>
+          <button type="button" onclick="validateInputs()" class="btn btn-success">validar</button>
         </div>
-      </div>
-    </div>
-  <!-- Modal IMAGENS-->
-<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="imageModalLabel"></h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <img id="modalImage" class="img-fluid square-img2 clickable-image" alt="prato imagem">
-        <h6 class="text-success mt-4">Ingredientes</h6>
-        <h6 id="igredientes_h6"></h6>
       </div>
     </div>
   </div>
-</div>
+  <!-- Modal RESERVAS 2-->
+  <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Reserva confirmada !</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal"
+            onclick="aplicar(document.getElementById('dia').value = dia,document.getElementById('horario').value = hora);restartmodal()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal IMAGENS-->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageModalLabel"></h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img id="modalImage" class="img-fluid square-img2 clickable-image" alt="prato imagem">
+          <h6 class="text-success mt-4">Ingredientes</h6>
+          <h6 id="igredientes_h6"></h6>
+        </div>
+      </div>
+    </div>
+  </div>
   <!--<footer class="footer text-center container px-4 px-lg-5">
         <p class="text-muted small mb-0">
             VerdeHut &copy; Copyright
         </p>
     </footer>-->
 
-    <script src="./js/smoothscroll.js"></script>
+  <script src="./js/smoothscroll.js"></script>
   <script src="./js/db_pratos_dia.js"></script>
   <script src="./js/three.js" type="module"></script>
   <script src="./js/modal.js"></script>
   <script>
-let formattedDate;
+    let formattedDate;
 
     // Automatically set the 'dia' field to today's date
     function setDefaultDate() {
@@ -218,10 +245,9 @@ let formattedDate;
       document.getElementById("dia").setAttribute("min", formattedDate);
       document.getElementById("dia3").setAttribute("min", formattedDate);
       correctpratohoje(formattedDate, document.getElementById('horario').value);
-    
     }
 
-    function correctpratohoje(dia, hora){
+    function correctpratohoje(dia, hora) {
       aplicar(dia, hora);
       vertodoscard(dia, hora);
       document.getElementById('dia').value = dia;
@@ -232,47 +258,38 @@ let formattedDate;
     }
 
     function handleDateTimeSelection(selectedDate) {
-    let horarioSelect = document.getElementById("horario");
-    let horarioSelect3 = document.getElementById("horario3");
-    let almocoOption = horarioSelect.querySelector("option[value='almoco']");
-    let almocoOption3 = horarioSelect3.querySelector("option[value='almoco']");
-    
-    let now = new Date();
-    let currentTime = now.getHours(); // Get current hour
+      let horarioSelect = document.getElementById("horario");
+      let horarioSelect3 = document.getElementById("horario3");
+      let almocoOption = horarioSelect.querySelector("option[value='almoco']");
+      let almocoOption3 = horarioSelect3.querySelector("option[value='almoco']");
 
-    // Disable "almoço" option if today is selected and time is past 16:00 (4 PM)
-    if (selectedDate == formattedDate && currentTime >= 15) {
-      almocoOption.disabled = true;
-      almocoOption3.disabled = true;  
-      // If "almoço" is selected, switch to "jantar"
-      if (horarioSelect.value === "almoco") {
-        horarioSelect.value = "jantar";
-        horarioSelect3.value = "jantar";
-        aplicar(selectedDate, "jantar");
-        vertodoscard(selectedDate, "jantar");
+      let now = new Date();
+      let currentTime = now.getHours(); // Get current hour
+
+      // Disable "almoço" option if today is selected and time is past 16:00 (4 PM)
+      if (selectedDate == formattedDate && currentTime >= 15) {
+        almocoOption.disabled = true;
+        almocoOption3.disabled = true;
+        // If "almoço" is selected, switch to "jantar"
+        if (horarioSelect.value === "almoco") {
+          horarioSelect.value = "jantar";
+          horarioSelect3.value = "jantar";
+          aplicar(selectedDate, "jantar");
+          vertodoscard(selectedDate, "jantar");
+        }
+      } else {
+        almocoOption.disabled = false;
+        almocoOption3.disabled = false;
       }
-    } else {
-      almocoOption.disabled = false;
-      almocoOption3.disabled = false;
     }
-  }
 
     window.onload = function () {
       setTimeout(() => {
-      setDefaultDate(); // Set today's date for dia
+        setDefaultDate(); // Set today's date for dia
       }, 100);
     };
 
   </script>
 </body>
-
-<!--             <h3>Contactos</h3>
-            <h6 class="mb-3">
-              Contacto : +351 920 505 245
-          </h6>
-          <h6 class="mb-5">
-              Morada : <a href="https://maps.app.goo.gl/dawatWCsQQGLxQUWA"> R. de Santa Catarina 632, 4000-450
-                  Porto </a>
-          </h6> -->
 
 </html>

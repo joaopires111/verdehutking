@@ -31,7 +31,14 @@ function modalload() {
 
 
 let itemstotal;
+let filtroON = false;
+let filtrodia = null;
+let filtrohorario = null;
+
 function vertodas() {
+    filtroON = false;
+    filtrodia = null;
+    filtrohorario = null;
 
     fetch('../php/reservas/read.php')
         .then(response => response.json())
@@ -40,16 +47,16 @@ function vertodas() {
             const list = document.getElementById('todas_reservas');
             list.innerHTML = `
 
-            <div class="rounded-3 border overflow-hidden mb-5">
-            <table class="table table-hover table-bordered text-center align-middle">
-            <thead>
-            <th>id</th>
-            <th>nome</th>
-            <th>telemovel</th>
-            <th>mesa</th>
-            <th>dia</th>
-            <th>horario</th>
-            <th>apagar</th>
+            <div class="rounded-4 border overflow-hidden mb-5">
+            <table class="table table-hover table-bordered  table-striped text-center align-middle">
+            <thead class="table-success">
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telemovel</th>
+            <th>Mesa</th>
+            <th>Dia</th>
+            <th>Horário</th>
+            <th></th>
             </thead>
             <tbody id="table-body3"></tbody>
             </table>
@@ -62,14 +69,13 @@ function vertodas() {
             items.forEach(item => {
 
                 const date = new Date(item.dia); // Convert string to Date
-                const day = date.getDate().toString().padStart(2, '0'); 
-                const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
                 const year = date.getFullYear();
-                
-                const formattedDate = `${day}-${month}-${year}`;
-                console.log(formattedDate);
 
-                const tr = document.createElement('tr');
+                const formattedDate = `${day}-${month}-${year}`;
+
+                let tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${item.id}</td>
                     <td>${item.nome}</td>
@@ -82,13 +88,21 @@ function vertodas() {
                     </td>
                     `;
 
+                // Add hover event listeners
+                tr.addEventListener('mouseover', function () {
+                    linhahover(item.mesa);
+                });
+
+                tr.addEventListener('mouseout', function () {
+                    linhahoverout(item.mesa);
+                });
+
                 tableBody.appendChild(tr);
 
             });
         })
         .catch(error => console.error('Error fetching items:', error));
 }
-
 
 function deleteReserv(id) {
     fetch('../php/reservas/delete.php', {
@@ -99,50 +113,87 @@ function deleteReserv(id) {
         .then(response => response.json())
         .then(data => {
             console.log(data.message);
-            vertodas();
+            if (filtroON) {
+
+                filtrardiahorario(filtrodia, filtrohorario);
+            } else {
+                vertodas();
+            }
         });
 }
 
 function filtrardiahorario(dia, horario) {
-    const list = document.getElementById('todas_reservas');
-    list.innerHTML = `
+    filtrodia = dia;
+    filtrohorario = horario;
+    filtroON = true;
 
-    <div class="rounded-3 border overflow-hidden mb-5">
-    <table class="table table-hover table-bordered text-center align-middle">
-    <thead>
-    <th>id</th>
-    <th>nome</th>
-    <th>telemovel</th>
-    <th>mesa</th>
-    <th>dia</th>
-    <th>horario</th>
-    <th>apagar</th>
-    </thead>
-    <tbody id="table-body3"></tbody>
-    </table>
-    </div>
-`;
-            // Get the tbody element for appending rows
-            const tableBody = document.getElementById('table-body3');
-    itemstotal.forEach(item => {
+    fetch('../php/reservas/read.php')
+        .then(response => response.json())
+        .then(items => {
+            itemstotal = items;
+            const list = document.getElementById('todas_reservas');
+            list.innerHTML = `
 
-        if(item.dia == dia && item.horario == horario){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-        <td>${item.id}</td>
-        <td>${item.nome}</td>
-        <td>${item.telemovel}</td>
-        <td>${item.mesa}</td>
-        <td>${item.dia}</td>
-        <td>${item.horario}</td>
-        <td>
-        <a class="btn btn-danger btn-block" onclick="deleteReserv(${item.id})">apagar</a>
-        </td>
+            <div class="rounded-4 border overflow-hidden mb-5">
+            <table class="table table-hover table-bordered  table-striped text-center align-middle">
+            <thead class="table-success">
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telemovel</th>
+            <th>Mesa</th>
+            <th>Dia</th>
+            <th>Horário</th>
+            <th></th>
+            </thead>
+            <tbody id="table-body3"></tbody>
+            </table>
+            </div>
         `;
 
-        tableBody.appendChild(tr);
-    }
-    });
+            // Get the tbody element for appending rows
+            const tableBody = document.getElementById('table-body3');
+
+            items.forEach(item => {
+
+                if (item.dia == dia && item.horario == horario) {
+
+                    const date = new Date(item.dia); // Convert string to Date
+                    const day = date.getDate().toString().padStart(2, '0');
+                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    const year = date.getFullYear();
+
+                    const formattedDate = `${day}-${month}-${year}`;
+                    console.log(formattedDate);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.nome}</td>
+                    <td>${item.telemovel}</td>
+                    <td>${item.mesa}</td>
+                    <td>${formattedDate}</td>
+                    <td>${item.horario}</td>
+                    <td>
+                    <a class="btn btn-danger btn-block" onclick="openDeleteModal(${item.id})">apagar</a>
+                    </td>
+                    `;
+                                    // Add hover event listeners
+                tr.addEventListener('mouseover', function () {
+                    linhahover(item.mesa);
+                });
+
+                tr.addEventListener('mouseout', function () {
+                    linhahoveroutred(item.mesa);
+                });
+
+                    tableBody.appendChild(tr);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching items:', error));
 }
+
+
+
 
 vertodas();

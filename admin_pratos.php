@@ -39,23 +39,6 @@ if (!isset($_SESSION['user'])) {
 <!-- CRUD LIST -->
     <h3 class="text-success">PRATOS</h3>
     <!-- Create Item -->
-    <h4 class="">Criar prato</h4>
-    <table class="table table-hover text-center align-middle mb-3">
-        <tr>
-        <th><input type="text" id="nome" class="form-control" placeholder="nome"></th>
-        <th><select id="tipo" name="tipo" class="form-control">
-            <option value="quente">quente</option>
-            <option value="salada">salada</option>
-            <option value="entrada">entrada</option>
-        </select></th>
-        <th><textarea id="ingredientes" class="form-control" placeholder="ingredientes"></textarea></th>
-        <th><input type="file" class="form-control" id="fileInput" accept="image/*"></th>
-        <th><a class="btn btn-success" onclick="createItem()">criar</a></th>
-    </tr>
-    </table>
-        <h5 id="imgwarning" class="text-danger" hidden> Selecione uma imagem !</h5>
-    
-    <h4>Lista pratos</h4>
     <div class="text-center mb-3">
       <label for="tipo2" class="fs-5">tipo:</label>
       <select id="tipo2" name="tipo" class="">
@@ -64,7 +47,8 @@ if (!isset($_SESSION['user'])) {
             <option value="entrada">entrada</option>
         </select>
       <button class="btn btn-warning"  onclick="filtrartipo(document.getElementById('tipo2').value)">filtrar</button>
-      <button class="btn btn-success" onclick="fetchItems()">ver todos</button>
+      <button class="btn btn-primary" onclick="fetchItems()">ver todos</button>
+      <button class="btn btn-success"  data-toggle="modal" data-target="#createmodal">Criar prato</button>
     </div>
         <!-- Item List -->
     <div id="items-list" class="mb-5"></div>
@@ -99,7 +83,7 @@ if (!isset($_SESSION['user'])) {
     </div>
     <!--modal end-->
 
-        <!-- Bootstrap Delete Confirmation Modal -->
+<!--DELETE MODAL -->
         <div id="deleteModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -108,7 +92,7 @@ if (!isset($_SESSION['user'])) {
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Tem a certeza que pretende apagar ?</p>
+                    <p id="deletemodaltext">Tem a certeza que pretende apagar?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -117,6 +101,40 @@ if (!isset($_SESSION['user'])) {
             </div>
         </div>
     </div>
+
+    <!--CREATE MODAL -->
+    <div id="createmodal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Criar prato</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <table class="table table-hover text-center align-middle mb-3">
+        <tr>
+        <th><input type="text" id="nome" class="form-control" placeholder="nome"></th>
+        <th><select id="tipo" name="tipo" class="form-control">
+            <option value="quente">quente</option>
+            <option value="salada">salada</option>
+            <option value="entrada">entrada</option>
+        </select></th>
+        <th><textarea id="ingredientes" class="form-control" placeholder="ingredientes"></textarea></th>
+        <th><input type="file" class="form-control" id="fileInput" accept="image/*"></th>
+        <th><a class="btn btn-success" onclick="createItem()">criar</a></th>
+    </tr>
+    </table>
+        <h5 id="imgwarning" class="text-danger" hidden> Selecione uma imagem !</h5>
+        <h5 id="pratocriado" class="text-success" hidden> Prato criado</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--modal end-->
+
 
 <script src="./js/crud_pratos.js"></script>
 <script>
