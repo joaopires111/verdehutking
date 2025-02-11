@@ -198,7 +198,7 @@ function vertodoscard(dia, horario) {
                     quenteCard.classList.add('col-md-4', 'm-0', 'p-0');
                     quenteCard.innerHTML = `
                         <div class="text-center m-0 p-0">
-                            <h5 class="text-success mb-2">${item.quente_nome}</h5>
+                            <h6 class="mb-2 bold">${item.quente_nome}</h6>
                             <img src="${item.quente_image}" class="img-fluid square-img clickable-image" alt="Quente Image" width="80%" height="80%">
                         </div>
                     `;
@@ -208,7 +208,7 @@ function vertodoscard(dia, horario) {
                     saladaCard.classList.add('col-md-4', 'm-0', 'p-0');
                     saladaCard.innerHTML = `
                         <div class="text-center m-0 p-0">
-                            <h5 class="text-success mb-2">${item.salada_nome}</h5>
+                            <h6 class="mb-2 bold">${item.salada_nome}</h6>
                             <img src="${item.salada_image}" class="img-fluid square-img clickable-image" alt="Salada Image" width="80%" height="80%">
                         </div>
                     `;
@@ -218,7 +218,7 @@ function vertodoscard(dia, horario) {
                     entradaCard.classList.add('col-md-4', 'm-0', 'p-0');
                     entradaCard.innerHTML = `
                         <div class="text-center m-0 p-0">
-                            <h5 class="text-success mb-2">${item.entrada_nome}</h5>
+                            <h6 class="mb-2 bold">${item.entrada_nome}</h6>
                             <img src="${item.entrada_image}" class="img-fluid square-img clickable-image" alt="Entrada Image" width="80%" height="80%">
                         </div>
                     `;

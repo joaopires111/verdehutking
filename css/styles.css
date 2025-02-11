@@ -3,12 +3,6 @@
   src: url('../assets/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
   font-style: normal;
 }
-@font-face {
-  font-family: 'Lobster';
-  src: url('../assets/fonts/Lobster-Regular.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
-}
 
 section {
   min-height: 100vh;
@@ -42,7 +36,32 @@ html {
 }
 
 h1, h2, h3, h4, h5, h6, p, a, label{
-  font-family: 'monserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: #8d5827;
+}
+
+.btn-outline-primary {
+  color: #8d5827 !important; /* Change text color */
+  border-color: #8d5827 !important; /* Change border color */
+  width: 8vw;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+  background-color: transparent !important; /* Keeps background same */
+  color: #8d5827 !important; /* Change text color */
+  border-color: #8d5827 !important; /* Change border color */
+  box-shadow: none !important; /* Removes any shadow */
+}
+
+.bold{
+  font-weight: 700;
+}
+
+.thin{
+  font-family: 'Montserrat ExtraLight', sans-serif;
   font-weight: 200;
 }
 
@@ -145,3 +164,28 @@ h1, h2, h3, h4, h5, h6, p, a, label{
   display: flex;
   flex-direction: column;
 }
+
+.content-clip {
+  overflow: hidden; /* Hide overflow */
+  height: 24px; /* Adjust based on the height of one div */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.content-clip .button-text {
+  transition: transform 0.3s ease-in-out;
+}
+
+a:hover .content-clip {
+  overflow: hidden;
+}
+
+a:hover .button-text {
+  transform: translateY(-100%); /* Move the text up on hover */
+}
+
+a:not(:hover) .button-text {
+  transform: translateY(0); /* Move the text back down when not hovering */
+}
+

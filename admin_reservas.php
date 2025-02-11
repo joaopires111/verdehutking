@@ -15,8 +15,9 @@ if (!isset($_SESSION['user'])) {
     <title>VerdeHut RESERVAS</title>
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
 
-    <link href="./css/styles.css" rel="stylesheet">
+
     <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/styles.css" rel="stylesheet">
     <script src="./js/three/jquery-3.5.1.min.js"></script>
     <script src="./js/three/popper.min.js"></script>
     <script src="./js/three/bootstrap.min.js"></script>
@@ -38,13 +39,13 @@ if (!isset($_SESSION['user'])) {
 }
 </style>
 <img src="assets\img\so texto verde hut.png" class="mt-5 img-fluid" alt="verdehutlogo" width="25%" height="25%">
-<h2 class="text-success mt-1 mb-5">ADMINISTRADOR</h2>
+<h2 class="mt-1 mb-5">ADMINISTRADOR</h2>
 <div class="sidediv" id="sidebar-container"></div>
 
 
     <div class="text-center mb-3">
     <div class="mb-3">
-    <h3 class="text-success">RESERVAS</h3>
+    <h3 class="">RESERVAS</h3>
       <label for="dia" class="fs-5">Dia:</label>
       <input type="date" id="dia" name="dia" class="fs-6 mx-2">
       <label for="horario" class="fs-5 mx-2">Horário:</label>
